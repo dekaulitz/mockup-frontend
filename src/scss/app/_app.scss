@@ -1,0 +1,131 @@
+@import "widget";
+@import "page";
+@import "breadcrumb";
+@import "login";
+@import "menu";
+
+@import "footer";
+@import "content";
+@import "messages";
+@import "form";
+@import "notification";
+html {
+  font-size: 13px;
+  -webkit-tap-highlight-color: transparent;
+  font-family: sans-serif;
+  overflow-y: scroll;
+  color: #2e2e2e;
+}
+
+body {
+  background-color: whitesmoke;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.app-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.border {
+  border-radius: 5px;
+}
+
+.content {
+  min-height: 550px;
+}
+
+.dropdown-menu {
+  border-bottom: solid 3px #292961;
+}
+
+.card {
+  border-top: #674d8f solid 2px;
+}
+
+.btn {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.bg-light {
+  background-color: white !important;
+}
+
+.bg-aqua {
+  background-color: #00c0ef !important;
+}
+
+.bg-green {
+  background-color: #00a65a !important;
+}
+
+.bg-yellow {
+  background-color: #f39c12 !important;
+}
+
+.bg-red {
+  background-color: #dd4b39 !important;
+}
+
+.navbar-default {
+  background-color: white !important;
+  border-bottom: #674d8f solid 2px;
+}
+
+.center-logo {
+  display: block;
+  padding: 15px 20px;
+  font-weight: 700;
+  color: #990000;
+  text-align: center;
+}
+
+.no-border {
+  border: none !important;
+}
+
+.add-space {
+  margin-top: 10px;
+}
+
+.add-space-left {
+  margin-left: 10px;
+}
+
+.add-space-right {
+  margin-right: 10px;
+}
+
+.add-space-bottom {
+  margin-bottom: 10px;
+}
+
+.table-cursor {
+  cursor: pointer;
+}
+
+.no-padding {
+  padding: 0px !important;
+}
+
+.no-margin {
+  margin: 0px !important;
+}
+
+@media (max-width: 991.98px) {
+  .bd-navbar .navbar-nav-scroll {
+    max-width: 100%;
+    height: 2.5rem;
+    margin-top: .25rem;
+    overflow: hidden;
+    font-size: .875rem;
+  }
+
+  .bd-navbar .navbar-nav-scroll .navbar-nav {
+    padding-bottom: 2rem;
+    /* overflow-x: auto; */
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}

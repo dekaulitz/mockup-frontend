@@ -1,0 +1,102 @@
+.profile {
+  padding-left: 0px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+}
+
+.profile a {
+  color: #292961;
+}
+
+.profile li {
+  font-weight: 500;
+}
+
+.profile-pane {
+  border-left: solid 1px #dee2e6;
+  border-bottom: solid 1px #dee2e6;
+  border-right: solid 1px #dee2e6;
+  padding: 10px;
+}
+
+.widget-table th {
+  font-size: 14px;
+  vertical-align: inherit;
+}
+
+.widget-table th, td {
+  white-space: nowrap;
+}
+
+.widget-table .table th, .table td {
+  font-size: 13px;
+}
+
+.widget-table input {
+  height: 12px;
+}
+
+.addon-box-checkbox-list {
+  border: solid 1px #dee2e6;
+  border-radius: 5px;
+  display: table;
+}
+
+.addon-box-list {
+  display: table;
+}
+
+.addon-box-list .addon {
+  padding: 5px !important;
+  white-space: nowrap;
+}
+
+.addon-box-list.form-control {
+
+}
+
+.addon-box-search {
+  border: solid 1px #dee2e6;
+  border-radius: 5px;
+  display: table;
+}
+
+.addon-box-search .form-control {
+  border: none;
+  height: auto !important;
+}
+
+.addon-box-search .form-control:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.img-profile h4 {
+  margin-top: 10px;
+}
+
+.img-profile img {
+  height: 100px;
+  width: 100px;
+  margin-top: 20px;
+}
+
+
+
+
+/* PAGINATION */
+.pagination > li > a {
+  background: #fafafa;
+  color: #666;
+  font-size: 15px !important;
+}
+
+.pagination.pagination-flat > li > a {
+  border-radius: 0 !important;
+}
+.pagination .page-item{
+  cursor: pointer;
+}
+.page-link {
+  padding: 5px;
+}
