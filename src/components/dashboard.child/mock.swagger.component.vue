@@ -1,35 +1,52 @@
 <template>
   <div>
-   <div class="card content-box">
-     <div class="card-header">
-       <div class="float-left"><h4>{{title}}</h4></div>
-       <div class="float-right">
-         <router-link :to="('/create')" class="btn btn-success">Create New Mockup</router-link>
-         <!--<button class="btn btn-danger" v-on:click="onDelete"><span class="fa fa-close"></span> Trash-->
-         <!--</button>-->
-         <!--<a class="btn btn-info" href="#"><span class="fa fa-file-excel-o"></span> Export</a>-->
-       </div>
-     </div>
-     <div class="card-body content-box-body">
-     <div id="swagger-ui"></div>
-     </div>
-   </div>
+    <app-breadcrumb :currentBreadCrumb="breadcrumbs"/>
+    <div class="card content-box">
+      <div class="card-header">
+        <div class="float-left"><h4>Swagger</h4></div>
+        <div class="float-right">
+          <router-link :to="('/')" class="btn btn-success">Mockup List</router-link>
+        </div>
+      </div>
+      <div class="card-body content-box-body">
+        <div id="swagger-ui"></div>
+      </div>
+    </div>
 
   </div>
 </template>
 
 <script>
+  import Breadcrumb from '../../shared/components/breadcrumb.component'
+
   export default {
     name: "mock.swagger.component",
-
+    data: function () {
+      {
+        return {
+          breadcrumbs: [
+            {"frontEndUrl": '/', 'menuName': "Mockup List"},
+            {
+              "frontEndUrl": '/detail/'+this.$router.currentRoute.params.id,
+              'menuName': "Detail " + this.$router.currentRoute.params.id
+            },
+            {
+              "frontEndUrl": this.$router.currentRoute.fullPath,
+              'menuName': "Swagger  "
+            }
+          ],
+        }
+      }
+    },
     beforeMount() {
     },
     mounted() {
-    const swaggerUi=require("./../../assets/js/swagger-ui-bundle")
-    const preset=require("./../../assets/js/swagger-ui-standalone-preset")
+      let mockId = this.$router.currentRoute.params.id
+      const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
+      const preset = require("./../../assets/js/swagger-ui-standalone-preset")
       // Begin Swagge//sdasd//r UI call region
       const ui = swaggerUi({
-        url: "https://dududev.ovo.id/mocks/5e4b60cb204f7c23d145ecb9/spec",
+        url: HOST_API + "/mocks/" + mockId + "/spec",
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
@@ -44,6 +61,9 @@
 
 
       window.on()
+    },
+    components: {
+      "app-breadcrumb": Breadcrumb
     }
   }
 </script>
