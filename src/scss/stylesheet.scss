@@ -9,3 +9,16 @@
 @import "app/content";
 @import "app/messages";
 @import "app/breadcrumb";
+@import "swagger-ui.css";
+
+.swagger-ui .scheme-container {
+  margin: 0 0 20px;
+  padding: 30px 0;
+  background: none;
+  box-shadow: none;
+}
+
+.servers{
+  margin-top: 10px;
+  color: #3b4151;
+}
