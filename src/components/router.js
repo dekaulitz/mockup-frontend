@@ -32,7 +32,7 @@ export default new Router({
           component: CreateMock
         },
         {
-          path: '/swagger',
+          path: '/swagger/:id',
           name: "swagger",
           component: SwaggerMock
         }

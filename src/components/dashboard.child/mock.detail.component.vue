@@ -10,11 +10,22 @@
             <div class="float-right">
               <router-link :to="('/')" class="btn btn-success">Back</router-link>
               <button type="button" class="btn btn-primary" v-on:click="updateMocks()">Update Mocks</button>
-              <a class="btn btn-success" v-bind:href="swagggerMockUrl"><span class="fa fa-undo"></span> Swagger UI</a>
+              <router-link :to="('/swagger/'+mockDetail.id)" class="btn btn-success">
+              <span class="fa fa-undo"></span> Swagger UI
+              </router-link>
             </div>
           </div>
           <div class="card-body content-box-body">
-            <div id="jsoneditor" style="height: 650px;width: 100%"></div>
+           <div class="row">
+             <div class="col-md-6">
+               <div id="jsoneditor" style="height: 650px;width: 100%"></div>
+             </div>
+             <div class="col-md-6">
+               <div class="card">
+                 <div id="swagger-ui"></div>
+               </div>
+             </div>
+           </div>
           </div>
         </div>
       </div></div>
@@ -48,6 +59,20 @@
       "app-breadcrumb": Breadcrumb,
     },
     methods: {
+      generateSwagger:function(){
+        const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
+        const preset = require("./../../assets/js/swagger-ui-standalone-preset")
+        // Begin Swagge//sdasd//r UI call region
+        const ui = swaggerUi({
+          url: HOST_API + "/mocks/" + this.$router.currentRoute.params.id + "/spec",
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [
+            swaggerUi.presets.apis,
+            preset
+          ]
+        })
+      },
       getData: function () {
         Service.getDetailMock(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
@@ -65,22 +90,17 @@
           const editor = new JSONEditor(container, options)
           editor.set(this.mockDetail)
           this.dataEditor = editor
-          this.swagggerMockUrl=hostApi+"/mocks/swagger?url="+hostApi+"/mocks/"+this.mockDetail.id+"/spec"
+          this.swagggerMockUrl=HOST_API+"/mocks/swagger?url="+HOST_API+"/mocks/"+this.mockDetail.id+"/spec"
         })
       },
       updateMocks: function () {
         console.log(this.dataEditor.get())
         Service.updateMock(this.$router.currentRoute.params.id, this.dataEditor.get(), (err, response) => {
           if (err != null) {
-            alert(err)
-            setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
+            alert(err.response.data)
           }
           alert("Mockup ID" + response.data.id + " Updated !")
-          setTimeout(() => {
-            this.$router.push({name: "listmock"})
-          }, 1000)
+          this.generateSwagger()
         })
       }
     },
@@ -89,6 +109,7 @@
     },
     mounted() {
       this.getData()
+      this.generateSwagger()
     }
 
   }
