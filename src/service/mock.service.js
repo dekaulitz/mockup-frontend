@@ -1,6 +1,6 @@
 const axios = require('axios');
 const instance = axios.create({
-  baseURL: hostApi,
+  baseURL: HOST_API,
   timeout: 5000,
   headers: {'client-id': 'mockup-frontend'}
 });
