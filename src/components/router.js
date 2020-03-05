@@ -4,19 +4,21 @@ import Dashboard from './dashboard.component'
 import ListMocks from './dashboard.child/dashboard.page.component'
 import MockDetail from './dashboard.child/mock.detail.component'
 import CreateMock from './dashboard.child/mock.create.component'
+import SwaggerMock from './dashboard.child/mock.swagger.component'
 
 Vue.use(Router)
 export default new Router({
+  mode: 'history',
   name: "router",
   routes: [
     {
       path: '/',
       component: Dashboard,
-      children:[
+      children: [
         {
-            path: '',
-            name: 'listmock',
-            component: ListMocks
+          path: '',
+          name: 'listmock',
+          component: ListMocks
         },
         {
           path: '/detail/:id',
@@ -28,9 +30,16 @@ export default new Router({
           path: '/create',
           name: 'createmock',
           component: CreateMock
+        },
+        {
+          path: '/swagger',
+          name: "swagger",
+          component: SwaggerMock
         }
       ]
-    }
+    },
+
+
     // children: [
     //   {
     //     path: '',
