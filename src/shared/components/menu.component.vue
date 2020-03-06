@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark main-navigation">
     <router-link to="/" class="btn btn-primary my-2 my-sm-0 app-name">
-      MOCKY - up | Swagger Mockup Server
+      MOCK-UP | Swagger Mockup Server
     </router-link>
 
 
@@ -48,10 +48,6 @@
 
     },
     methods: {
-      onLogout:function () {
-        alert("berak")
-      }
-
     },
     computed: {}
   }
