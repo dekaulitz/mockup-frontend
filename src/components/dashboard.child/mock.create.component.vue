@@ -118,9 +118,6 @@
 </script>
 
 <style scoped>
-  textarea {
-    width: 100%;
-    height: 550px;
-  }
+
 </style>
 
