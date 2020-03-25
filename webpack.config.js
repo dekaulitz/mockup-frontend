@@ -7,7 +7,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/mocks/static/dist/',
+    publicPath: '/dist/',
     filename: '[name].js'
   },
   module: {
@@ -120,9 +120,9 @@ if (process.env.NODE_ENV === 'production') {
         warnings: false
       }
     }),
-    // new webpack.LoaderOptionsPlugin({
-    //   minimize: true
-    // })
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
 
   ])
 } else {
