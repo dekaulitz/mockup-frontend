@@ -9,11 +9,21 @@
             <div class="float-left"><h4>Create New Mockup</h4></div>
             <div class="float-right">
               <router-link :to="('/')" class="btn btn-success">Back</router-link>
+              <button type="button" class="btn btn-primary" v-on:click="generateSwagger()">Validate Swagger</button>
               <button type="button" class="btn btn-primary" v-on:click="storeMockup()">Save Mockup</button>
             </div>
           </div>
           <div class="card-body content-box-body">
-            <div id="jsoneditor-create" style="height: 650px;width: 100%"></div>
+            <div class="row">
+              <div class="col-md-6">
+                <div id="jsoneditor-create" style="height: 650px;width: 100%"></div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div id="swagger-ui-create"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -51,6 +61,20 @@
       "app-breadcrumb": Breadcrumb,
     },
     methods: {
+      generateSwagger:function(){
+        const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
+        const preset = require("./../../assets/js/swagger-ui-standalone-preset")
+        // Begin Swagge//sdasd//r UI call region
+        const ui = swaggerUi({
+          spec: this.dataEditor.get().spec,
+          dom_id: '#swagger-ui-create',
+          deepLinking: true,
+          presets: [
+            swaggerUi.presets.apis,
+            preset
+          ]
+        })
+      },
       getData: function () {
 
       },
@@ -87,15 +111,13 @@
       const editor = new JSONEditor(container, options)
       editor.set(this.mockDetail)
       this.dataEditor = editor
+      this.generateSwagger()
     }
 
   }
 </script>
 
 <style scoped>
-  textarea {
-    width: 100%;
-    height: 550px;
-  }
+
 </style>
 

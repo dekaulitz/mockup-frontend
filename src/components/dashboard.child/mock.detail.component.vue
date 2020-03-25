@@ -10,6 +10,7 @@
             <div class="float-right">
               <router-link :to="('/')" class="btn btn-success">Back</router-link>
               <button type="button" class="btn btn-primary" v-on:click="updateMocks()">Update Mocks</button>
+              <button type="button" class="btn btn-primary" v-on:click="generateSwagger()">Validate Swagger</button>
               <router-link :to="('/swagger/'+mockDetail.id)" class="btn btn-success">
               <span class="fa fa-undo"></span> Swagger UI
               </router-link>
@@ -64,7 +65,7 @@
         const preset = require("./../../assets/js/swagger-ui-standalone-preset")
         // Begin Swagge//sdasd//r UI call region
         const ui = swaggerUi({
-          url: HOST_API + "/mocks/" + this.$router.currentRoute.params.id + "/spec",
+          spec: this.dataEditor.get().spec,
           dom_id: '#swagger-ui',
           deepLinking: true,
           presets: [
@@ -90,7 +91,7 @@
           const editor = new JSONEditor(container, options)
           editor.set(this.mockDetail)
           this.dataEditor = editor
-          this.swagggerMockUrl=HOST_API+"/mocks/swagger?url="+HOST_API+"/mocks/"+this.mockDetail.id+"/spec"
+          this.generateSwagger()
         })
       },
       updateMocks: function () {
@@ -98,9 +99,14 @@
         Service.updateMock(this.$router.currentRoute.params.id, this.dataEditor.get(), (err, response) => {
           if (err != null) {
             alert(err.response.data)
+            setTimeout(() => {
+              this.$router.push({name: "listmock"})
+            }, 1000)
           }
-          alert("Mockup ID" + response.data.id + " Updated !")
-          this.generateSwagger()
+          else{
+            alert("Mockup ID" + response.data.id + " Updated !")
+            this.generateSwagger()
+          }
         })
       }
     },
@@ -109,16 +115,11 @@
     },
     mounted() {
       this.getData()
-      this.generateSwagger()
     }
 
   }
 </script>
 
 <style scoped>
-  textarea {
-    width: 100%;
-    height: 550px;
-  }
 </style>
 
