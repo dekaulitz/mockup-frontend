@@ -8,7 +8,7 @@ import SwaggerMock from './dashboard.child/mock.swagger.component'
 
 Vue.use(Router)
 export default new Router({
-  mode: 'history',
+
   name: "router",
   routes: [
     {

@@ -43,24 +43,20 @@
     mounted() {
       let mockId = this.$router.currentRoute.params.id
       const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
-      const preset = require("./../../assets/js/swagger-ui-standalone-preset")
+       const preset = require("./../../assets/js/swagger-ui-standalone-preset")
       // Begin Swagge//sdasd//r UI call region
       const ui = swaggerUi({
         url: HOST_API + "/mocks/" + mockId + "/spec",
         dom_id: '#swagger-ui',
-        deepLinking: true,
         presets: [
           swaggerUi.presets.apis,
           preset
-        ]
+        ],
+        plugins: [
+          swaggerUi.plugins.DownloadUrl
+        ],
       })
 
-      // End Swagger UI call region
-
-      window.ui = ui
-
-
-      window.on()
     },
     components: {
       "app-breadcrumb": Breadcrumb

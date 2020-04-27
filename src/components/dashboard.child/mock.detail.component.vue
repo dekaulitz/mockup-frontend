@@ -67,11 +67,13 @@
         const ui = swaggerUi({
           spec: this.dataEditor.get().spec,
           dom_id: '#swagger-ui',
-          deepLinking: true,
           presets: [
             swaggerUi.presets.apis,
             preset
-          ]
+          ],
+          plugins: [
+            swaggerUi.plugins.DownloadUrl
+          ],
         })
       },
       getData: function () {
