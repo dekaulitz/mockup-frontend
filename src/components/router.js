@@ -5,13 +5,25 @@ import ListMocks from './dashboard.child/dashboard.page.component'
 import MockDetail from './dashboard.child/mock.detail.component'
 import CreateMock from './dashboard.child/mock.create.component'
 import SwaggerMock from './dashboard.child/mock.swagger.component'
+import Login from './login.component'
 
 Vue.use(Router)
 export default new Router({
-
   name: "router",
   routes: [
     {
+      path:"/login",
+      component:Login,
+      name:'Login'
+    },
+    {
+      beforeEnter:(to,from,next)=>{
+        let isAuthenticated=window.localStorage.getItem(constants.AUTHORIZATION);
+        if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+        else {
+          next()
+        }
+      },
       path: '/',
       component: Dashboard,
       children: [
@@ -38,43 +50,7 @@ export default new Router({
         }
       ]
     },
+  ],
 
-
-    // children: [
-    //   {
-    //     path: '',
-    //     name: 'dashboard',
-    //     component: Dashboard
-    //   },
-    //   {
-    //     path: 'project',
-    //     name: 'project-list',
-    //     component: ProjectList
-    //   },
-    //   {
-    //     path: 'profile',
-    //     name: 'profile',
-    //     component: ProfileUser
-    //   },
-    //   {
-    //     path: 'project/:id',
-    //     component: ProjectDetail,
-    //     children: [
-    //       {
-    //         path: '/',
-    //         name: 'project-information',
-    //         component: ProjectInfo
-    //
-    //       }
-    //     ]
-    //   },
-    // ]
-
-    // {
-    //   path: '*',
-    //   name: 'not-found',
-    //   component: NotFound
-    // }
-  ]
 
 })

@@ -11,12 +11,18 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
 library.add(faUser, faUsers, faEdit)
 
+const AUTHORIZATION = "AUTHORIZATION"
+
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = true
 Vue.config.silent = true
 Vue.config.devtools = true
 
 global.eventHub = new Vue();
+global.constants = {
+  AUTHORIZATION: "AUTHORIZATION"
+}
 new Vue({
   el: '#app', router,
   render: h => h(App)

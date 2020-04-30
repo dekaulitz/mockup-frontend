@@ -1,10 +1,12 @@
 const axios = require('axios');
 const instance = axios.create({
   baseURL: HOST_API,
-  timeout: 5000,
+  timeout: TIME_OUT,
   headers: {'client-id': 'mockup-frontend'}
 });
-const mockService = {}
+const mockService = {
+  Authorization:""
+}
 
 mockService.getListMocks = function (callback) {
   instance.get("/mocks/list").then((response) => {
@@ -40,6 +42,15 @@ mockService.storeMock = (data, callback) => {
 
 mockService.updateMock = (id, data, callback) => {
   instance.put("/mocks/" + id, data).then(response => {
+    return callback(null, response)
+  }).catch(err => {
+    return callback(err, null)
+  })
+}
+
+
+mockService.doLogin=(data,callback)=>{
+  instance.post("/mocks/login", data).then(response => {
     return callback(null, response)
   }).catch(err => {
     return callback(err, null)

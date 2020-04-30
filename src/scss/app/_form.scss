@@ -2,9 +2,14 @@
 form css
  */
 
-.input-default {
-  border-left: #337ab7 solid;
+//.input-default {
+//  border-left: #337ab7 solid;
+//}
+
+label.label-bold {
+  font-weight: 600;
 }
+
 
 .input-error {
   border-left: red solid;

@@ -38,7 +38,7 @@
                 Title
               </th>
               <th class="header-pagination">
-                Spec Title
+                Description
               </th>
             </tr>
             </thead>
@@ -53,8 +53,7 @@
 
               <td>{{item.id}}</td>
               <td>{{item.title}}</td>
-              <td v-if="item.spec.info!=null">{{item.spec.info.title}}</td>
-              <td v-else></td>
+              <td>{{item.description}}</td>
             </tr>
             </tbody>
           </table>

@@ -7,7 +7,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    publicPath: '/mocks/static/dist/',
     filename: '[name].js'
   },
   module: {
@@ -133,5 +133,28 @@ if (process.env.NODE_ENV === 'production') {
       'window.jQuery': 'jquery',
       jQuery: 'jquery',
       Popper: 'pooper.js'
-    })])
+    }),
+    new webpack.ProvidePlugin({
+      'window.$': 'jquery',
+      jquery: 'jquery',
+      'window.jQuery': 'jquery',
+      jQuery: 'jquery',
+      Popper: 'pooper.js'
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
+
+  ])
 }
