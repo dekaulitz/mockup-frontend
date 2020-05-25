@@ -1,14 +1,10 @@
-@import "widget";
-@import "page";
-@import "breadcrumb";
-@import "login";
-@import "menu";
 
 @import "footer";
 @import "content";
 @import "messages";
 @import "form";
 @import "notification";
+
 html {
   font-size: 13px;
   -webkit-tap-highlight-color: transparent;
@@ -16,16 +12,33 @@ html {
   overflow-y: scroll;
   color: #2e2e2e;
 }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+div{
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #2e2e2e;
-  text-align: left;
-  background-color: #fff;
 }
+body {
+  background-color: whitesmoke;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+label{
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+input{
+  border-radius: 4px !important;
+  padding: 5px 10px !important;
+  height: 35px !important;
+}
+
+
+.content-wrapper{
+  min-height: 550px
+}
+
+.pointer{
+  cursor: pointer;
+}
+
 
 .app-name {
   font-size: 13px;
@@ -34,6 +47,7 @@ body {
 
 .border {
   border-radius: 5px;
+  padding: 10px;
 }
 
 .content {
@@ -44,9 +58,6 @@ body {
   border-bottom: solid 3px #292961;
 }
 
-//.card {
-//  border-top: #674d8f solid 2px;
-//}
 
 .btn {
   font-size: 13px;
@@ -85,39 +96,6 @@ body {
   color: #990000;
   text-align: center;
 }
-
-.no-border {
-  border: none !important;
-}
-
-.add-space {
-  margin-top: 10px;
-}
-
-.add-space-left {
-  margin-left: 10px;
-}
-
-.add-space-right {
-  margin-right: 10px;
-}
-
-.add-space-bottom {
-  margin-bottom: 10px;
-}
-
-.table-cursor {
-  cursor: pointer;
-}
-
-.no-padding {
-  padding: 0px !important;
-}
-
-.no-margin {
-  margin: 0px !important;
-}
-
 @media (max-width: 991.98px) {
   .bd-navbar .navbar-nav-scroll {
     max-width: 100%;
@@ -134,3 +112,4 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 }
+

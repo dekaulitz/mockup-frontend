@@ -6,10 +6,10 @@ import Vuex from 'vuex'
 
 import router from './components/router'
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faUser, faUsers, faEdit} from '@fortawesome/free-solid-svg-icons'
+import {faUser, faUsers, faEdit,faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
-library.add(faUser, faUsers, faEdit)
+library.add(faUser, faUsers, faEdit,faSignOutAlt)
 
 const AUTHORIZATION = "AUTHORIZATION"
 

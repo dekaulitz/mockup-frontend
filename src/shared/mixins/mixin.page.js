@@ -26,7 +26,7 @@ export const basePage = {
   },
   mounted: function () {
     // loaderActivate()
-    this.getData()
+    // this.getData()
   },
   computed: {
     selectedAll: {
@@ -51,19 +51,6 @@ export const basePage = {
     }
   },
   methods: {
-    getData: function () {
-      // this.$router.push({path: this.$router.path, query: this.query})
-      let querystring = require('querystring');
-      Service.getMockPage('?' + querystring.stringify(this.query), (err, response) => {
-        if (err != null) {
-          alert(err)
-        }
-        this.rows = response.rows
-        this.totalPage = response.pageCount
-        this.currentPage = response.page
-        this.totalData = response.rowCount
-      })
-    },
     sortingTable: function (option) {
       this.query.sort = option
       this.query.page = 1

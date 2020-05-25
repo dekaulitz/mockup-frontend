@@ -5,48 +5,63 @@
         MOCK-UP | Swagger Mockup Server
       </router-link>
     </nav>
-    <div class="container">
-      <div class="login-page">
-        <div class="login-title">
-          <h1>Mockyup | Your mockup server</h1>
-        </div>
-        <div class="row">
-          <div class="col-md-7 col-sm-12">
-            <div class="login-intro">
-              <h4>Login Dashboard Mockyup</h4>
-              <p>API Contract and Mock server base on swagger </p>
-              <ul>
-                <li>As Mock Server</li>
-                <li>As API Contract</li>
-                <li>As simplify your collaboration kit</li>
-              </ul>
+    <div>
+      <div class="content-wrapper">
+        <div class="container">
+          <div class="login-page">
+            <div class="login-title">
+              <h1>Mockyup | Your mockup server</h1>
             </div>
-          </div>
-          <div class="col-md-5 col-sm-12">
-            <div class="login-form">
-              <div class="card panel-default ">
-                <div class="alert alert-warning" v-show="showAlert">
-                  {{messageAlert}}
+            <div class="row">
+              <div class="col-12 col-md-7 ">
+                <div class="login-intro">
+                  <h4>Login Dashboard Mockyup</h4>
+                  <p>API Contract and Mock server base on swagger </p>
+                  <ul>
+                    <li>As Mock Server</li>
+                    <li>As API Contract</li>
+                    <li>As Simplify your collaboration kit</li>
+                  </ul>
                 </div>
-                <div class="card-body  ">
-                  <form role="form" v-on:submit="doLogin">
-                    <div class="box-body">
-                      <div class="form-group">
-                        <label for="usernameInput" class="label-bold">Username</label>
-                        <input type="text" class="form-control input-default" id="usernameInput"
-                               placeholder="Enter username" v-model="username">
-                      </div>
-                      <div class="form-group">
-                        <label for="passwordInput" class="label-bold">Password</label>
-                        <input type="password" class="form-control input-default"
-                               id="passwordInput"
-                               placeholder="Password" v-model="password">
-                      </div>
+              </div>
+              <div class="col-12 col-md-5 ">
+                <div class="login-form">
+                  <div class="card panel-default ">
+                    <div v-show="showAlert" class="alert alert-warning">
+                      {{ messageAlert }}
                     </div>
-                    <div class="box-footer">
-                      <button type="submit" class="btn btn-success col-md-12">Login</button>
+                    <div class="card-body  ">
+                      <form role="form" @submit="doLogin">
+                        <div class="box-body">
+                          <div class="form-group">
+                            <label for="usernameInput" class="label-bold">Username</label>
+                            <input
+                              id="usernameInput"
+                              v-model="username"
+                              type="text"
+                              class="form-control input-default"
+                              placeholder="Enter username"
+                            >
+                          </div>
+                          <div class="form-group">
+                            <label for="passwordInput" class="label-bold">Password</label>
+                            <input
+                              id="passwordInput"
+                              v-model="password"
+                              type="password"
+                              class="form-control input-default"
+                              placeholder="Password"
+                            >
+                          </div>
+                        </div>
+                        <div class="box-footer">
+                          <button type="submit" class="btn btn-success col-md-12">
+                            Login
+                          </button>
+                        </div>
+                      </form>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -54,11 +69,14 @@
         </div>
       </div>
     </div>
+    <Footer/>
   </div>
 
 </template>
 <script>
   import Service from '../service/mock.service'
+  import Auth from '../service/auth.service'
+  import Footer from '../shared/components/footer.login.menu.component'
 
   export default {
     name: "login.component",
@@ -70,9 +88,12 @@
         password: ""
       }
     },
-    beforeMount:function(){
-      let isAuthenticated=localStorage.getItem(constants.AUTHORIZATION)
-      if (isAuthenticated!=null || isAuthenticated!==undefined)
+    components:{
+      Footer
+    },
+    beforeMount: function () {
+      let isAuthenticated = localStorage.getItem(constants.AUTHORIZATION)
+      if (isAuthenticated !== null)
         this.$router.push("/");
     },
     methods: {
@@ -83,14 +104,13 @@
         }
         Service.doLogin(data, (err, response) => {
           if (err != null) {
-            console.log(err.response.data.message)
             this.messageAlert = err
             this.showAlert = true
             setTimeout(() => {
               this.showAlert = false
             }, 5000)
           }
-          localStorage.setItem(constants.AUTHORIZATION,response.data)
+          Auth.setAuth(response.data)
           this.$router.push("/");
         })
         e.preventDefault();
@@ -133,3 +153,4 @@
 
   }
 </style>
+

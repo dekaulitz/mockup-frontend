@@ -18,6 +18,7 @@
 
 <script>
   import Breadcrumb from '../../shared/components/breadcrumb.component'
+  import Service from '../../service/mock.service'
 
   export default {
     name: "mock.swagger.component",
@@ -42,19 +43,28 @@
     },
     mounted() {
       let mockId = this.$router.currentRoute.params.id
-      const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
-       const preset = require("./../../assets/js/swagger-ui-standalone-preset")
-      // Begin Swagge//sdasd//r UI call region
-      const ui = swaggerUi({
-        url: HOST_API + "/mocks/" + mockId + "/spec",
-        dom_id: '#swagger-ui',
-        presets: [
-          swaggerUi.presets.apis,
-          preset
-        ],
-        plugins: [
-          swaggerUi.plugins.DownloadUrl
-        ],
+      Service.getSpec(mockId,(err, response) => {
+        if (err != null) {
+          alert(err)
+          setTimeout(() => {
+            this.$router.push({name: "listmock"})
+          }, 1000)
+        }
+        const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
+        const preset = require("./../../assets/js/swagger-ui-standalone-preset")
+        // Begin Swagge//sdasd//r UI call region
+        const ui = swaggerUi({
+          url: HOST_API + "/mocks/" + mockId + "/spec",
+          dom_id: '#swagger-ui',
+          spec:response.data,
+          presets: [
+            swaggerUi.presets.apis,
+            preset
+          ],
+          plugins: [
+            swaggerUi.plugins.DownloadUrl
+          ],
+        })
       })
 
     },

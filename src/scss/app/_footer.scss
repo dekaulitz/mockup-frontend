@@ -6,3 +6,23 @@ footer
   font-size: 13px;
   font-weight: 600;
 }
+
+.footer-navigation {
+  margin-top: 50px;
+  height: 120px;
+
+  .nav {
+    padding-top: 25px;
+  }
+
+  a.nav-link {
+    padding-left: 5px;
+    color: #948e9c;
+  }
+
+  .nav-item {
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+

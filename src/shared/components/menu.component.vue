@@ -10,44 +10,56 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-<!--    <div class="navbar-collapse collapse" id="menuNavbar">-->
-<!--      <div class="mr-auto"></div>-->
-<!--      <ul class="navbar-nav mr-1">-->
-<!--        <li class="nav-item dropdown active">-->
-<!--          <a class="nav-item nav-link dropdown-toggle mr-md-12" href="#" id="bd-versions1"-->
-<!--             data-toggle="dropdown"-->
-<!--             aria-haspopup="true" aria-expanded="false">-->
-<!--            <font-awesome-icon icon="user" />-->
-<!--          </a>-->
-<!--          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions1">-->
-<!--            <router-link to="/profile" class="dropdown-item">-->
-<!--              <span class="fa fa-user"></span> <span class="text-left">Profile</span>-->
-<!--            </router-link>-->
-<!--            &lt;!&ndash;<router-link to="/profile-setting" class="dropdown-item">&ndash;&gt;-->
-<!--            &lt;!&ndash;<span class="fa fa-cogs"></span> Settings&ndash;&gt;-->
-<!--            &lt;!&ndash;</router-link>&ndash;&gt;-->
-<!--            <a class="dropdown-item cursor" @click="onLogout"><span class="fa fa-sign-out"></span>-->
-<!--              Logout</a>-->
-<!--          </div>-->
-<!--        </li>-->
-<!--      </ul>-->
-<!--    </div>-->
+    <div class="navbar-collapse collapse" id="menuNavbar">
+
+      <ul class="navbar-nav mr-auto">
+        <div v-show="hasUserAccess">
+        <li class="nav-item dropdown active">
+          <router-link to="/users" class="btn btn-primary my-2 my-sm-0 app-name">
+            <font-awesome-icon icon="users" /> Users
+          </router-link>
+        </li>
+        </div>
+      </ul>
+
+      <ul class="navbar-nav mr-1">
+        <li class="nav-item dropdown active">
+          <a class="nav-item nav-link dropdown-toggle mr-md-12" href="#" id="bd-versions1"
+             data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false">
+         Sign in as  {{username}}         <font-awesome-icon icon="user" />
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions1">
+            <a class="dropdown-item pointer" @click="onLogout"><span class="fa fa-sign-out"></span>
+              <font-awesome-icon icon="sign-out-alt" />   Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
   </nav>
 
 </template>
 
 <script>
+  import Auth from './../../service/auth.service'
   export default {
     name: "navigation-header",
     data: function () {
       return {
-        username:""
+        username:"",
+        hasUserAccess:false,
       }
     },
     created: function () {
-
+      let auth=Auth.getAuth()
+      if (Auth.hasUsersAccessMenu()) this.hasUserAccess = true
+      this.username=auth.username.toString().charAt(0).toUpperCase()+auth.username.slice(1);
     },
     methods: {
+      onLogout:function () {
+        Auth.delAuth()
+        this.$router.push("/login")
+      }
     },
     computed: {}
   }

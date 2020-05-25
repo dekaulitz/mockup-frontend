@@ -6,10 +6,7 @@
         <div class="float-left"><h4>{{title}}</h4></div>
         <div v-show="hasAccess">
           <div class="float-right">
-            <router-link :to="('/create')" class="btn btn-success">Create New Mockup</router-link>
-            <!--<button class="btn btn-danger" v-on:click="onDelete"><span class="fa fa-close"></span> Trash-->
-            <!--</button>-->
-            <!--<a class="btn btn-info" href="#"><span class="fa fa-file-excel-o"></span> Export</a>-->
+            <router-link :to="('/users/create')" class="btn btn-success">Create New Users</router-link>
           </div>
         </div>
       </div>
@@ -37,10 +34,7 @@
                 Mongodb ID
               </th>
               <th class="header-pagination">
-                Title
-              </th>
-              <th class="header-pagination">
-                Description
+                Username
               </th>
             </tr>
             </thead>
@@ -48,14 +42,12 @@
 
             <tr v-for="item in rows">
               <td>
-                <router-link :to="'/detail/'+item.id">
+                <router-link :to="'/users/detail/'+item.id">
                   <font-awesome-icon icon="edit"/>
                 </router-link>
               </td>
-
               <td>{{item.id}}</td>
-              <td>{{item.title}}</td>
-              <td>{{item.description}}</td>
+              <td>{{item.username}}</td>
             </tr>
             </tbody>
           </table>
@@ -82,13 +74,13 @@
     mixins: [basePage],
     data: function () {
       return {
-        title: "List Swagger Mockup",
+        title: "List Users",
         searchingProperty: {
-          "title": "Title"
+          "username": "Username"
         },
         hasAccess: false,
         searchingAttribute: "",
-        targetApi: "/mocks/users",
+        targetApi: "/mocks/page",
         query: {
           page: 1,
           size: 10,
@@ -97,12 +89,12 @@
         rows: [],
         sortingVariable:
           {
-            "id,desc": "New Project",
-            "id,asc": "Old Project",
+            "id,desc": "New Users",
+            "id,asc": "Old Users",
           },
 
         breadcrumbs: [
-          {"frontEndUrl": '/', 'menuName': "Mockup List"}
+          {"frontEndUrl": '/users', 'menuName': "Users List"}
         ]
       }
     },
@@ -110,7 +102,7 @@
       getData: function () {
         // this.$router.push({path: this.$router.path, query: this.query})
         let querystring = require('querystring');
-        Service.getMockPage('?' + querystring.stringify(this.query), (err, response) => {
+        Service.getListUsers('?' + querystring.stringify(this.query), (err, response) => {
           if (err != null) {
             alert(err)
           }
@@ -123,7 +115,7 @@
     },
     created() {
       this.getData()
-      if (Auth.hasCreateMockaccess()) this.hasAccess = true
+      if (Auth.hasCreateUsersAccess()) this.hasAccess = true
     },
     // mounted:function () {
     //    BasePage.methods.getData(this)
