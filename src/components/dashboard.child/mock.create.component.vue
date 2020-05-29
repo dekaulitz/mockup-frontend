@@ -4,23 +4,24 @@
     <div class="container-fluid content">
       <div class="row ">
         <div class="col-md-12 no-padding">
-        <div class="card content-box ">
-          <div class="card-header">
-            <div class="float-left"><h4>Create New Mockup</h4></div>
-            <div class="float-right">
-              <router-link :to="('/')" class="btn btn-success">Back</router-link>
-              <button type="button" class="btn btn-primary" v-on:click="generateSwagger()">Validate Swagger</button>
-              <button type="button" class="btn btn-primary" v-on:click="storeMockup()">Save Mockup</button>
-            </div>
-          </div>
-          <div class="card-body content-box-body">
-            <div class="row">
-              <div class="col-md-6">
-                <div id="jsoneditor-create" style="height: 650px;width: 100%"></div>
+          <div class="card content-box ">
+            <div class="card-header">
+              <div class="float-left"><h4>Create New Mockup</h4></div>
+              <div class="float-right">
+                <router-link :to="('/')" class="btn btn-success">Back</router-link>
+                <button type="button" class="btn btn-primary" v-on:click="generateSwagger()">Validate Swagger</button>
+                <button type="button" class="btn btn-primary" v-on:click="storeMockup()">Save Mockup</button>
               </div>
-              <div class="col-md-6">
-                <div class="card">
-                  <div id="swagger-ui-create"></div>
+            </div>
+            <div class="card-body content-box-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div id="jsoneditor-create" style="height: 650px;width: 100%"></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card">
+                    <div id="swagger-ui-create"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -28,7 +29,7 @@
         </div>
       </div>
     </div>
-  </div></div>
+  </div>
 </template>
 
 <script>
@@ -36,6 +37,7 @@
   import Service from '../../service/mock.service'
   import 'jsoneditor/dist/jsoneditor.min.css'
   import JSONEditor from 'jsoneditor/dist/jsoneditor.min'
+  import Auth from "../../service/auth.service";
 
   export default {
     name: "mock.detail.component",
@@ -61,7 +63,7 @@
       "app-breadcrumb": Breadcrumb,
     },
     methods: {
-      generateSwagger:function(){
+      generateSwagger: function () {
         const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
         const preset = require("./../../assets/js/swagger-ui-standalone-preset")
         // Begin Swagge//sdasd//r UI call region
@@ -82,21 +84,17 @@
         console.log(this.dataEditor.get())
         Service.storeMock(this.dataEditor.get(), (err, response) => {
           if (err != null) {
-            alert(err)
+            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response.data)
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            setTimeout(() => {
+              this.$router.push({name: "listmock"})
+            }, 1000)
+          } else {
+            alert("Mockup ID" + response.data.id + " Created !")
             setTimeout(() => {
               this.$router.push({name: "listmock"})
             }, 1000)
           }
-          if (err != null) {
-            alert(err)
-            setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
-          }
-          alert("Mockup ID" + response.data.id + " Created !")
-          setTimeout(() => {
-            this.$router.push({name: "listmock"})
-          }, 1000)
         })
       }
     },

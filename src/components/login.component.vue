@@ -104,7 +104,7 @@
         }
         Service.doLogin(data, (err, response) => {
           if (err != null) {
-            this.messageAlert = err
+            this.messageAlert = err.response.data.response_message
             this.showAlert = true
             setTimeout(() => {
               this.showAlert = false

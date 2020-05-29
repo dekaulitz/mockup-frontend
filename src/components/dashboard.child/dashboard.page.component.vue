@@ -106,18 +106,20 @@
         ]
       }
     },
-    methods:{
+    methods: {
       getData: function () {
         // this.$router.push({path: this.$router.path, query: this.query})
         let querystring = require('querystring');
         Service.getMockPage('?' + querystring.stringify(this.query), (err, response) => {
           if (err != null) {
-            alert(err)
+            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response.data)
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+          } else {
+            this.rows = response.rows
+            this.totalPage = response.pageCount
+            this.currentPage = response.page
+            this.totalData = response.rowCount
           }
-          this.rows = response.rows
-          this.totalPage = response.pageCount
-          this.currentPage = response.page
-          this.totalData = response.rowCount
         })
       }
     },

@@ -49,8 +49,7 @@
                               id="mocksAccess"
                               class="form-control input-default" v-model="mocksAccess"
                             >
-                              <option value="NONE" selected>None</option>
-                              <option value="MOCKS_READ">Read</option>
+                              <option value="MOCKS_READ"selected>Read</option>
                               <option value="MOCKS_READ_WRITE">Read and Write</option>
                             </select>
                           </div>
@@ -96,7 +95,7 @@
     data: function () {
       return {
         showAlert: false,
-        hasAccess:false,
+        hasAccess: false,
         messageAlert: "",
         username: "",
         password: "",
@@ -124,15 +123,18 @@
           password: this.password,
           accessList: access
         }
-        Service.updateUserById(this.$router.currentRoute.params.id,data, (err, response) => {
+        Service.updateUserById(this.$router.currentRoute.params.id, data, (err, response) => {
           if (err != null) {
             this.messageAlert = err
             this.showAlert = true
-            setTimeout(() => {
-              this.showAlert = false
-            }, 5000)
-          }else{
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            else
+              setTimeout(() => {
+                this.showAlert = false
+              }, 5000)
+          } else {
             alert("updated !")
+            this.$router.push({name: 'listusers'})
           }
         })
       },
@@ -141,28 +143,30 @@
           this.hasAccess = true
         Service.getUserId(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
-            alert(err)
-            setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
-          }
-          let res = response.data
-          this.username = res.username
-          this.accessList = res.accessList
-          if (res.accessList.includes(Auth.USERS_READ_WRITE)) {
-            this.userAccess = Auth.USERS_READ_WRITE
-          } else if (res.accessList.includes(Auth.USERS_READ)) {
-            this.userAccess = Auth.USERS_READ
+            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response.data)
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            else
+              setTimeout(() => {
+                this.$router.push({name: "listmock"})
+              }, 1000)
           } else {
-            this.userAccess = "NONE"
-          }
-
-          if (res.accessList.includes(Auth.MOCKS_READ_WRITE)) {
-            this.mocksAccess = Auth.MOCKS_READ_WRITE
-          } else if (res.accessList.includes(Auth.MOCKS_READ)) {
-            this.mocksAccess = Auth.MOCKS_READ
-          } else {
-            this.mocksAccess = "NONE"
+            let res = response.data
+            this.username = res.username
+            this.accessList = res.accessList
+            if (res.accessList.includes(Auth.USERS_READ_WRITE)) {
+              this.userAccess = Auth.USERS_READ_WRITE
+            } else if (res.accessList.includes(Auth.USERS_READ)) {
+              this.userAccess = Auth.USERS_READ
+            } else {
+              this.userAccess = "NONE"
+            }
+            if (res.accessList.includes(Auth.MOCKS_READ_WRITE)) {
+              this.mocksAccess = Auth.MOCKS_READ_WRITE
+            } else if (res.accessList.includes(Auth.MOCKS_READ)) {
+              this.mocksAccess = Auth.MOCKS_READ
+            } else {
+              this.mocksAccess = "NONE"
+            }
           }
         })
       }

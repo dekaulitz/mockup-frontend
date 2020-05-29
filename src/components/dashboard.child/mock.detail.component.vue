@@ -84,35 +84,39 @@
       getData: function () {
         Service.getDetailMock(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
-            alert(err)
-            setTimeout(() => {
+            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response.data)
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            else setTimeout(() => {
               this.$router.push({name: "listmock"})
             }, 1000)
+          } else {
+            this.mockDetail = response.data
+            if (Array.isArray(this.mockDetail.users)) {
+              if (this.mockDetail.users[0].access !== undefined && this.mockDetail.users[0].access === Auth.MOCKS_READ_WRITE)
+                this.hasAccess = true
+            }
+            const options = {
+              modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
+              name: "jsonContent",
+            };
+            const container = document.getElementById("jsoneditor")
+            const editor = new JSONEditor(container, options)
+            editor.set(this.mockDetail)
+            this.dataEditor = editor
+            this.generateSwagger()
           }
-          this.mockDetail = response.data
-          if (Array.isArray(this.mockDetail.users)) {
-            if (this.mockDetail.users[0].access !== undefined && this.mockDetail.users[0].access === Auth.MOCKS_READ_WRITE)
-              this.hasAccess = true
-          }
-          const options = {
-            modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
-            name: "jsonContent",
-          };
-          const container = document.getElementById("jsoneditor")
-          const editor = new JSONEditor(container, options)
-          editor.set(this.mockDetail)
-          this.dataEditor = editor
-          this.generateSwagger()
         })
       },
       updateMocks: function () {
         console.log(this.dataEditor.get())
         Service.updateMock(this.$router.currentRoute.params.id, this.dataEditor.get(), (err, response) => {
           if (err != null) {
-            alert(err)
-            setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
+            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response.data)
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            else
+              setTimeout(() => {
+                this.$router.push({name: "listmock"})
+              }, 1000)
           } else {
             alert("Mockup ID" + response.data.id + " Updated !")
             this.generateSwagger()

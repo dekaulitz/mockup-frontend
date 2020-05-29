@@ -9,7 +9,41 @@ const mockService = {
   Authorization: ""
 }
 
+/**
+ * Authentication request
+ */
+//do login
+mockService.doLogin = (data, callback) => {
+  instance.post("/mocks/login", data).then(response => {
+    return callback(null, response)
+  }).catch(err => {
+    return callback(err, null)
+  })
+}
 
+/**
+ * Authorization request
+ */
+//do refresh token
+mockService.doRefresh = function (err, callback) {
+  if (err.response.data.response_code === auth.RESPONSE_DO_REFRESH) {
+    console.log("do refresh")
+    instance.get("/mocks/auth/refresh", {
+      headers: {
+        Authorization: getAuthorizationHeader()
+      }
+    }).then(response => {
+      return callback(null, response)
+    }).catch(err => {
+      return callback(err, null)
+    })
+  } else{
+    return callback(err, null)
+  }
+}
+
+
+//get token and pass on the header
 const getAuthorizationHeader = function () {
   let isAuthenticated = auth.getAuth()
   if (isAuthenticated === null) {
@@ -17,6 +51,8 @@ const getAuthorizationHeader = function () {
   }
   return "Bearer " + isAuthenticated.token
 }
+
+//get user list
 mockService.getListUsers = function (query, callback) {
   instance.get("/mocks/users" + query, {
     headers: {
@@ -25,10 +61,17 @@ mockService.getListUsers = function (query, callback) {
   }).then((response) => {
     return callback(null, response.data)
   }).catch((err) => {
-    return callback(err, null)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.getListUsers(query, callback)
+    })
   });
 }
 
+//get list mocks
 mockService.getListMocks = function (callback) {
   instance.get("/mocks/list", {
     headers: {
@@ -41,7 +84,8 @@ mockService.getListMocks = function (callback) {
   });
 }
 
-mockService.getMockPage = function (query, callback) {
+//get mocks page
+mockService.getMockPage = (query, callback) => {
   instance.get("/mocks/page" + query, {
     headers: {
       Authorization: getAuthorizationHeader()
@@ -49,10 +93,17 @@ mockService.getMockPage = function (query, callback) {
   }).then((response) => {
     return callback(null, response.data)
   }).catch((err) => {
-    return callback(err, null)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.getMockPage(query, callback)
+    })
   });
 }
 
+//get detail mocks
 mockService.getDetailMock = (id, callback) => {
   instance.get("/mocks/" + id + "/detail", {
     headers: {
@@ -61,10 +112,37 @@ mockService.getDetailMock = (id, callback) => {
   }).then((response) => {
     return callback(null, response)
   }).catch((err) => {
-    return callback(err, null)
+    console.log(err.response)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.getDetailMock(id, callback)
+    })
   })
 }
 
+mockService.getUsersMock=function(id,callback){
+  instance.get("/mocks/" + id + "/users", {
+    headers: {
+      Authorization: getAuthorizationHeader()
+    }
+  }).then((response) => {
+    return callback(null, response)
+  }).catch((err) => {
+    console.log(err.response)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.getUsersMock(id, callback)
+    })
+  })
+}
+
+//create new mock
 mockService.storeMock = (data, callback) => {
   instance.post("/mocks/store", data, {
     headers: {
@@ -73,10 +151,17 @@ mockService.storeMock = (data, callback) => {
   }).then(response => {
     return callback(null, response)
   }).catch(err => {
-    return callback(err, null)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.storeMock(data, callback)
+    })
   })
 }
 
+//update mock
 mockService.updateMock = (id, data, callback) => {
   instance.put("/mocks/" + id + "/update", data, {
     headers: {
@@ -85,10 +170,17 @@ mockService.updateMock = (id, data, callback) => {
   }).then(response => {
     return callback(null, response)
   }).catch(err => {
-    return callback(err, null)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.updateMock(id,data, callback)
+    })
   })
 }
 
+//get spec
 mockService.getSpec = (id, callback) => {
   instance.get("/mocks/" + id + "/spec", {
     headers: {
@@ -97,17 +189,17 @@ mockService.getSpec = (id, callback) => {
   }).then(response => {
     return callback(null, response)
   }).catch(err => {
-    return callback(err, null)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.getSpec(id, callback)
+    })
   })
 }
 
-mockService.doLogin = (data, callback) => {
-  instance.post("/mocks/login", data).then(response => {
-    return callback(null, response)
-  }).catch(err => {
-    return callback(err, null)
-  })
-}
+//get user list page
 mockService.getUserList = function (query, callback) {
   instance.get("/mocks/users/list" + query, {
     headers: {
@@ -116,10 +208,17 @@ mockService.getUserList = function (query, callback) {
   }).then((response) => {
     return callback(null, response.data)
   }).catch((err) => {
-    return callback(err, null)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.getUserList(query, callback)
+    })
   });
 }
 
+//get user detail
 mockService.getUserId = function (id, callback) {
   instance.get("/mocks/users/" + id + "/detail", {
     headers: {
@@ -128,9 +227,17 @@ mockService.getUserId = function (id, callback) {
   }).then(response => {
     return callback(null, response)
   }).catch(err => {
-    return callback(err, null)
+    return doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.getUserId(id, callback)
+    })
   })
 }
+
+//update user id
 mockService.updateUserById = function (id, data, callback) {
   instance.put("/mocks/users/" + id + "/update", data, {
     headers: {
@@ -139,10 +246,18 @@ mockService.updateUserById = function (id, data, callback) {
   }).then(response => {
     return callback(null, response)
   }).catch(err => {
-    return callback(err, null)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.updateUserById(id,data, callback)
+    })
   })
 }
-mockService.createNewUser=function(data,callback){
+
+//create new user
+mockService.createNewUser = function (data, callback) {
   instance.post("/mocks/addUser", data, {
     headers: {
       Authorization: getAuthorizationHeader()
@@ -150,8 +265,15 @@ mockService.createNewUser=function(data,callback){
   }).then(response => {
     return callback(null, response)
   }).catch(err => {
-    return callback(err, null)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.createNewUser(data, callback)
+    })
   })
 }
+
 
 module.exports = mockService

@@ -39,7 +39,7 @@
                               v-model="password"
                               type="password"
                               class="form-control input-default"
-                              placeholder="Password"required
+                              placeholder="Password" required
                             >
                           </div>
                           <div class="form-group">
@@ -48,8 +48,7 @@
                               id="mocksAccess"
                               class="form-control input-default" v-model="mocksAccess"
                             >
-                              <option value="NONE" selected>None</option>
-                              <option value="MOCKS_READ">Read</option>
+                              <option value="MOCKS_READ "selected>Read</option>
                               <option value="MOCKS_READ_WRITE">Read and Write</option>
                             </select>
                           </div>
@@ -88,13 +87,14 @@
   import Service from '../../service/mock.service'
   import 'jsoneditor/dist/jsoneditor.min.css'
   import JSONEditor from 'jsoneditor/dist/jsoneditor.min'
+  import Auth from "../../service/auth.service";
 
   export default {
     name: "mock.detail.component",
     data: function () {
       return {
         showAlert: false,
-        hasAccess:false,
+        hasAccess: false,
         messageAlert: "",
         username: "",
         password: "",
@@ -122,15 +122,20 @@
           password: this.password,
           accessList: access
         }
-        Service.createNewUser(data,(err,response)=>{
+        Service.createNewUser(data, (err, response) => {
           if (err != null) {
+            console.log(err)
             this.messageAlert = err
             this.showAlert = true
-            setTimeout(() => {
-              this.showAlert = false
-            }, 5000)
-          }else{
+            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response)
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            else
+              setTimeout(() => {
+                this.showAlert = false
+              }, 5000)
+          } else {
             alert("created !")
+            this.$router.push({name: 'listusers'})
           }
         })
       },
