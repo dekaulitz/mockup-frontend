@@ -13,6 +13,7 @@ import Login from './login.component'
 Vue.use(Router)
 export default new Router({
   name: "router",
+  mode: 'history',
   routes: [
     {
       path: "/login",

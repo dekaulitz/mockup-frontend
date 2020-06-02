@@ -5,7 +5,7 @@
 </template>
 
 <script>
-
+  import 'jsoneditor/dist/jsoneditor.min.css'
 
   export default {
     name: 'app',

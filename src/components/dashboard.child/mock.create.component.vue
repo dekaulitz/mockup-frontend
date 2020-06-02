@@ -105,8 +105,8 @@
         modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
         name: "jsonContent",
       };
-      const container = document.getElementById("jsoneditor-create")
-      const editor = new JSONEditor(container, options)
+      const container = document.getElementById("jsoneditjsoneditor-create")
+      const editor = new global.constants.JSONEditor(container, options)
       editor.set(this.mockDetail)
       this.dataEditor = editor
       this.generateSwagger()

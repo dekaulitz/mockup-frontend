@@ -141,7 +141,24 @@ mockService.getUsersMock=function(id,callback){
     })
   })
 }
-
+mockService.getHistoriesMocks=function(id,callback){
+  instance.get("/mocks/" + id + "/histories", {
+    headers: {
+      Authorization: getAuthorizationHeader()
+    }
+  }).then((response) => {
+    return callback(null, response)
+  }).catch((err) => {
+    console.log(err.response)
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data)
+      return mockService.getHistoriesMocks(id, callback)
+    })
+  })
+}
 //create new mock
 mockService.storeMock = (data, callback) => {
   instance.post("/mocks/store", data, {
