@@ -36,7 +36,6 @@
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
   import 'jsoneditor/dist/jsoneditor.min.css'
-  import JSONEditor from 'jsoneditor/dist/jsoneditor.min'
   import Auth from "../../service/auth.service";
 
   export default {
@@ -105,7 +104,7 @@
         modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
         name: "jsonContent",
       };
-      const container = document.getElementById("jsoneditjsoneditor-create")
+      const container = document.getElementById("jsoneditor-create")
       const editor = new global.constants.JSONEditor(container, options)
       editor.set(this.mockDetail)
       this.dataEditor = editor

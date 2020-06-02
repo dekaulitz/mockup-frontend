@@ -20,7 +20,7 @@
                     </div>
                     <fieldset>
                       <legend>Users Data:</legend>
-                      <form role="form" @submit="createUser">
+                      <form role="form">
                         <div class="box-body">
                           <div class="form-group">
                             <label for="usernameInput" class="label-bold">Username</label>
@@ -48,7 +48,7 @@
                               id="mocksAccess"
                               class="form-control input-default" v-model="mocksAccess"
                             >
-                              <option value="MOCKS_READ "selected>Read</option>
+                              <option value="MOCKS_READ" >Read</option>
                               <option value="MOCKS_READ_WRITE">Read and Write</option>
                             </select>
                           </div>
@@ -65,7 +65,7 @@
                           </div>
                         </div>
                         <div class="box-footer">
-                          <button type="submit" class="btn btn-success col-md-12">
+                          <button type="submit" class="btn btn-success col-md-12" @click.prevent="createUser">
                             Create
                           </button>
                         </div>
@@ -98,7 +98,7 @@
         messageAlert: "",
         username: "",
         password: "",
-        mocksAccess: "NONE",
+        mocksAccess: "MOCKS_READ",
         userAccess: "NONE",
         breadcrumbs: [
           {"frontEndUrl": '/users', 'menuName': "Users List"},

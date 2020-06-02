@@ -122,7 +122,9 @@ input {
 .bg-red {
   background-color: #dd4b39 !important;
 }
-
+.no-background{
+  background-color: transparent !important;
+}
 .navbar-default {
   background-color: white !important;
   border-bottom: #674d8f solid 2px;

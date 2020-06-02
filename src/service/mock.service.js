@@ -26,6 +26,7 @@ mockService.doLogin = (data, callback) => {
  */
 //do refresh token
 mockService.doRefresh = function (err, callback) {
+  console.log(err)
   if (err.response.data.response_code === auth.RESPONSE_DO_REFRESH) {
     console.log("do refresh")
     instance.get("/mocks/auth/refresh", {
@@ -112,7 +113,7 @@ mockService.getDetailMock = (id, callback) => {
   }).then((response) => {
     return callback(null, response)
   }).catch((err) => {
-    console.log(err.response)
+    alert(err)
     return mockService.doRefresh(err, (errResponse, response) => {
       if (errResponse != null) {
         return callback(errResponse, null)
@@ -275,11 +276,13 @@ mockService.updateUserById = function (id, data, callback) {
 
 //create new user
 mockService.createNewUser = function (data, callback) {
+  console.log("data")
   instance.post("/mocks/addUser", data, {
     headers: {
       Authorization: getAuthorizationHeader()
     }
   }).then(response => {
+    console.log(response)
     return callback(null, response)
   }).catch(err => {
     return mockService.doRefresh(err, (errResponse, response) => {

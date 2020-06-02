@@ -19,10 +19,18 @@
               </div>
             </div>
             <div class="card-body content-box-body">
+
+
               <div class="border add-space-bottom">
-                <h3>Project Title {{mockDetail.title}}</h3>
-                <h5>Project Description: {{mockDetail.description}}</h5>
+                <div class="">
+                  <h3 class="headerline">Project Title {{mockDetail.title}} | Created by {{updatedBy.username}}</h3>
+                  <p class="lead">{{mockDetail.description}}</p>
+                  <label>Updated on
+                    <font-awesome-icon icon="calendar"/>
+                    {{mockDetail.dateUpdated|localdate}}</label>
+                </div>
               </div>
+
 
               <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -48,11 +56,37 @@
                   </div>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                 <div class="border add-space-top col-sm-12 col-md-12"  v-show="hasAccess">
+                   <div class="form-group">
+                     <label for="exampleInputEmail1">Add new User</label>
+                     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                   </div>
+                   <div class="form-group">
+                     <label for="mocksAccess" class="label-bold">Management Mocks</label>
+                     <select
+                       id="mocksAccess"
+                       class="form-control input-default" v-model="mocksAccess"
+                     >
+                       <option value="MOCKS_READ" >Read</option>
+                       <option value="MOCKS_READ_WRITE">Read and Write</option>
+                     </select>
+                   </div>
+                   <div class="box-footer">
+                     <button type="submit" class="btn btn-success">
+                       Add user
+                     </button>
+                   </div>
+                 </div>
                   <ul class="list-group add-space-top">
                     <div v-for="(mockusers,index) in this.mockUsers">
-                      <li class="list-group-item" v-for="(user,index) in mockusers.users" :key="index">
-                        {{user.id}}-{{user.username}}{{user.access}}
-                        {{user.updatedDate}}
+                      <li class="list-group-item " v-for="(user,index) in mockusers.users" :key="index">
+                        <div class="mock-list">
+                          <div class="row">
+                            <div class="mr-auto">{{user.username}} | {{user.access}}</div>
+                            <div class="mr-1">edit | delete</div>
+                          </div>
+                        </div>
                       </li>
                     </div>
                   </ul>
@@ -60,8 +94,16 @@
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                   <ul class="list-group add-space-top">
                     <li class="list-group-item" v-for="(history,index) in mockHistories" :key="index">
-                      {{history.id}} updatedBy {{history.updatedBy.username}}
-                      {{history.updatedDate}}
+
+
+                      <div class="mock-list">
+                        <div class="row">
+                          <div class="mr-auto">Updated By {{history.updatedBy.username}} on
+                            {{history.updatedDate|localdate}}
+                          </div>
+                          <div class="mr-1">Show | Swagger UI</div>
+                        </div>
+                      </div>
                     </li>
                   </ul>
                 </div>
@@ -91,6 +133,7 @@
         dataEditor: {},
         swagggerMockUrl: "",
         hasAccess: false,
+        updatedBy: {},
         breadcrumbs: [
           {"frontEndUrl": '/', 'menuName': "Mockup List"},
           {
@@ -123,13 +166,15 @@
       getData: function () {
         Service.getDetailMock(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
-            alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
-            else setTimeout(() => {
+            if (Auth.shouldLogout(err)) {
+              alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
+              this.$router.push({name: 'Login'})
+            } else setTimeout(() => {
               this.$router.push({name: "listmock"})
             }, 1000)
           } else {
             this.mockDetail = response.data
+            this.updatedBy = response.data.updatedBy
             if (Array.isArray(this.mockDetail.users)) {
               if (this.mockDetail.users[0].access !== undefined && this.mockDetail.users[0].access === Auth.MOCKS_READ_WRITE)
                 this.hasAccess = true
@@ -138,7 +183,6 @@
               modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
               name: "jsonContent",
             };
-
             const container = document.getElementById("jsoneditor")
             const editor = new global.constants.JSONEditor(container, options)
             editor.set(this.mockDetail)
@@ -173,9 +217,7 @@
 
       },
       updateMocks: function () {
-        console.log(this.dataEditor.get())
-        this.mockDetail.spec = this.dataEditor.get()
-        Service.updateMock(this.$router.currentRoute.params.id, this.mockDetail, (err, response) => {
+        Service.updateMock(this.$router.currentRoute.params.id, this.dataEditor.get(), (err, response) => {
           if (err != null) {
             alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
             if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
@@ -198,5 +240,9 @@
 </script>
 
 <style scoped>
+  .mock-list .mr-auto, .mr-1 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
 </style>
 
