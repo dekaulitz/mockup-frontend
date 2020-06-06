@@ -2,18 +2,19 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from './dashboard.component'
 import ListMocks from './dashboard.child/dashboard.page.component'
-import ListUsers from './dashboard.child/dashboard.users.component'
-import UsersCreate from './dashboard.child/user.create.component'
-import UsersDetail from './dashboard.child/user.detail.component'
-import MockDetail from './dashboard.child/mock.detail.component'
-import CreateMock from './dashboard.child/mock.create.component'
-import SwaggerMock from './dashboard.child/mock.swagger.component'
+import ListUsers from './users/dashboard.users.component'
+import UsersCreate from './users/user.create.component'
+import UsersDetail from './users/user.detail.component'
+import MockDetail from './mocks/mock.detail.component'
+import CreateMock from './mocks/mock.create.component'
+import SwaggerMock from './mocks/mock.swagger.component'
 import Login from './login.component'
 
-Vue.use(Router)
+Vue.use(Router);
 export default new Router({
   name: "router",
   mode: 'history',
+
   routes: [
     {
       path: "/login",
@@ -26,7 +27,7 @@ export default new Router({
       name: 'dashboard',
       beforeEnter: function (to, from, next) {
         let isAuthenticated = window.localStorage.getItem(constants.AUTHORIZATION);
-        if ( isAuthenticated===null) return next({name: 'Login'})
+        if (isAuthenticated === null) return next({name: 'Login'});
         else {
           next()
         }
@@ -71,6 +72,5 @@ export default new Router({
       ]
     },
   ],
-
 
 })

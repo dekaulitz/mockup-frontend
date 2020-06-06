@@ -15,9 +15,9 @@
 </template>
 
 <script>
-    export default {
-        name: "footer.menu.component"
-    }
+  export default {
+    name: "footer.menu.component"
+  }
 </script>
 
 <style scoped>

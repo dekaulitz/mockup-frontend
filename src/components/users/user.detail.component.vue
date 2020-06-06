@@ -6,7 +6,7 @@
         <div class="col-md-12 no-padding">
           <div class="card content-box ">
             <div class="card-header">
-              <div class="float-left"><h4>Create New Users</h4></div>
+              <div class="float-left"><h4>Detail Users</h4></div>
               <div class="float-right">
                 <router-link :to="('/users')" class="btn btn-success">Back</router-link>
               </div>
@@ -14,13 +14,14 @@
             <div class="card-body content-box-body">
               <div class="row">
                 <div class="col-md-6 ">
+
                   <div class="border">
                     <div v-show="showAlert" class="alert alert-warning">
                       {{ messageAlert }}
                     </div>
                     <fieldset>
                       <legend>Users Data:</legend>
-                      <form role="form">
+                      <form role="form" @submit="updateUser">
                         <div class="box-body">
                           <div class="form-group">
                             <label for="usernameInput" class="label-bold">Username</label>
@@ -29,7 +30,7 @@
                               v-model="username"
                               type="text"
                               class="form-control input-default"
-                              placeholder="Enter username" required
+                              placeholder="Enter username"
                             >
                           </div>
                           <div class="form-group">
@@ -39,7 +40,7 @@
                               v-model="password"
                               type="password"
                               class="form-control input-default"
-                              placeholder="Password" required
+                              placeholder="Password"
                             >
                           </div>
                           <div class="form-group">
@@ -48,7 +49,7 @@
                               id="mocksAccess"
                               class="form-control input-default" v-model="mocksAccess"
                             >
-                              <option value="MOCKS_READ" >Read</option>
+                              <option value="MOCKS_READ"selected>Read</option>
                               <option value="MOCKS_READ_WRITE">Read and Write</option>
                             </select>
                           </div>
@@ -64,10 +65,12 @@
                             </select>
                           </div>
                         </div>
-                        <div class="box-footer">
-                          <button type="submit" class="btn btn-success col-md-12" @click.prevent="createUser">
-                            Create
-                          </button>
+                        <div v-show="hasAccess">
+                          <div class="box-footer">
+                            <button type="submit" class="btn btn-success col-md-12">
+                              Update
+                            </button>
+                          </div>
                         </div>
                       </form>
                     </fieldset>
@@ -85,12 +88,10 @@
 <script>
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
-  import 'jsoneditor/dist/jsoneditor.min.css'
-  import JSONEditor from 'jsoneditor/dist/jsoneditor.min'
-  import Auth from "../../service/auth.service";
+  import Auth from '../../service/auth.service'
 
   export default {
-    name: "mock.detail.component",
+    name: "user.detail.component",
     data: function () {
       return {
         showAlert: false,
@@ -98,13 +99,13 @@
         messageAlert: "",
         username: "",
         password: "",
-        mocksAccess: "MOCKS_READ",
-        userAccess: "NONE",
+        mocksAccess: "",
+        userAccess: "",
         breadcrumbs: [
           {"frontEndUrl": '/users', 'menuName': "Users List"},
           {
             "frontEndUrl": this.$router.currentRoute.fullPath,
-            'menuName': "Create New User "
+            'menuName': "Detail User "
           },
         ],
 
@@ -113,33 +114,65 @@
       "app-breadcrumb": Breadcrumb,
     },
     methods: {
-      createUser: function () {
-        let access = []
-        if (this.userAccess !== "NONE") access.push(this.userAccess)
-        if (this.mocksAccess !== "NONE") access.push(this.mocksAccess)
+      updateUser: function () {
+        let access = [];
+        if (this.userAccess !== "NONE") access.push(this.userAccess);
+        if (this.mocksAccess !== "NONE") access.push(this.mocksAccess);
         let data = {
           username: this.username,
           password: this.password,
           accessList: access
-        }
-        Service.createNewUser(data, (err, response) => {
+        };
+        Service.updateUserById(this.$router.currentRoute.params.id, data, (err, response) => {
           if (err != null) {
-            console.log(err)
-            this.messageAlert = err
-            this.showAlert = true
-            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            this.messageAlert = err;
+            this.showAlert = true;
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
             else
               setTimeout(() => {
                 this.showAlert = false
               }, 5000)
           } else {
-            alert("created !")
+            alert("updated !");
             this.$router.push({name: 'listusers'})
           }
         })
       },
-
+      getData: function () {
+        if (Auth.hasUpdateUsersAccess())
+          this.hasAccess = true;
+        Service.getUserId(this.$router.currentRoute.params.id, (err, response) => {
+          if (err != null) {
+            alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data);
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
+            else
+              setTimeout(() => {
+                this.$router.push({name: "listmock"})
+              }, 1000)
+          } else {
+            let res = response.data;
+            this.username = res.username;
+            this.accessList = res.accessList;
+            if (res.accessList.includes(Auth.USERS_READ_WRITE)) {
+              this.userAccess = Auth.USERS_READ_WRITE
+            } else if (res.accessList.includes(Auth.USERS_READ)) {
+              this.userAccess = Auth.USERS_READ
+            } else {
+              this.userAccess = "NONE"
+            }
+            if (res.accessList.includes(Auth.MOCKS_READ_WRITE)) {
+              this.mocksAccess = Auth.MOCKS_READ_WRITE
+            } else if (res.accessList.includes(Auth.MOCKS_READ)) {
+              this.mocksAccess = Auth.MOCKS_READ
+            } else {
+              this.mocksAccess = "NONE"
+            }
+          }
+        })
+      }
+    },
+    created() {
+      this.getData();
     }
   }
 </script>

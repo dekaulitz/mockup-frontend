@@ -1,5 +1,3 @@
-import Service from '../../service/mock.service'
-
 export const basePage = {
   // extend: BaseComponent,
   data: function () {
@@ -12,7 +10,7 @@ export const basePage = {
         size: 10,
         sort: ""
       },
-      searchingAttribute:"",
+      searchingAttribute: "",
       totalPage: "",
       currentPage: "",
       totalData: "",
@@ -34,7 +32,7 @@ export const basePage = {
         return this.rows ? this.selectedIds.length === this.rows.length : false;
       },
       set: function (value) {
-        let selected = []
+        let selected = [];
         if (value) {
           this.rows.forEach(function (data) {
             selected.push(data.ID);
@@ -52,35 +50,35 @@ export const basePage = {
   },
   methods: {
     sortingTable: function (option) {
-      this.query.sort = option
-      this.query.page = 1
+      this.query.sort = option;
+      this.query.page = 1;
       this.getData();
     },
     listingTable: function (option) {
-      this.query.size = option
-      this.query.page = 1
+      this.query.size = option;
+      this.query.page = 1;
       this.getData();
     },
     previousPage: function (option) {
-      this.query.page = option
+      this.query.page = option;
       this.getData();
     },
     nextPage: function (option) {
-      this.query.page = option
+      this.query.page = option;
       this.getData()
     },
     onReset: function () {
-      delete this.query.q
-      this.searchingAttribute=""
+      delete this.query.q;
+      this.searchingAttribute = "";
       this.getData()
     },
     onSearching: function (attribute, value) {
-      this.query.q = attribute + ':' + value
-      this.query.page = 1
+      this.query.q = attribute + ':' + value;
+      this.query.page = 1;
       this.getData()
     },
     onDelete: function () {
-      $("#generalModal").modal('show')
+      $("#generalModal").modal('show');
       this.$emit("modalProperties", {
         title: "Delete Approval ",
         message: "Are you sure want to delete this data?",
@@ -98,19 +96,19 @@ export const basePage = {
           type: 2,
         })
       } else {
-        $("#generalModal").modal('hide')
+        $("#generalModal").modal('hide');
         HttpReq.service("get", this.targetApi + '/' + ids + '/delete').then(response => {
-          this.$store.dispatch('displaySuccessMessage', true)
-          this.$store.dispatch('message', response.meta.message)
+          this.$store.dispatch('displaySuccessMessage', true);
+          this.$store.dispatch('message', response.meta.message);
           this.getData()
 
         }).catch(error => {
-          this.$store.commit('displayErrorMessage', true)
+          this.$store.commit('displayErrorMessage', true);
           this.$store.commit('message', error.message)
         })
 
       }
 
-    }
+    },
   }
-}
+};

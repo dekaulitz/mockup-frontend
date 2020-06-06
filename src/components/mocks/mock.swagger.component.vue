@@ -44,18 +44,18 @@
     beforeMount() {
     },
     mounted() {
-      let mockId = this.$router.currentRoute.params.id
+      let mockId = this.$router.currentRoute.params.id;
       Service.getSpec(mockId, (err, response) => {
         if (err != null) {
-          alert(err.response.data.response_message!=null?err.response.data.response_message:err.response.data)
-          if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+          alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data);
+          if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
           else
             setTimeout(() => {
               this.$router.push({name: "listmock"})
             }, 1000)
         } else {
-          const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
-          const preset = require("./../../assets/js/swagger-ui-standalone-preset")
+          const swaggerUi = require("../../assets/js/swagger-ui-bundle");
+          const preset = require("../../assets/js/swagger-ui-standalone-preset");
           // Begin Swagge//sdasd//r UI call region
           const ui = swaggerUi({
             dom_id: '#swagger-ui',

@@ -1,5 +1,5 @@
 <template>
-  <div class="footer-navigation fixed-bottom">
+  <div class="footer-navigation">
     <hr/>
     <ul class="container nav  justify-content-end ">
       <li class="nav-item">

@@ -33,3 +33,18 @@ textarea {
   width: 100%;
   height: 550px;
 }
+
+.mock-list .mr-auto, .mr-1 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.user-search-list {
+  position: absolute;
+  width: 70%;
+  /*padding-right: 20px;*/
+}
+
+.user-search-list .user-item {
+  cursor: pointer;
+}

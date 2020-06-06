@@ -8,7 +8,7 @@
     <div>
       <div class="content-wrapper">
         <div class="container">
-          <div class="login-page">
+          <div class="login-page add-space-top">
             <div class="login-title">
               <h1>Mockyup | Your mockup server</h1>
             </div>
@@ -92,7 +92,7 @@
       Footer
     },
     beforeMount: function () {
-      let isAuthenticated = localStorage.getItem(constants.AUTHORIZATION)
+      let isAuthenticated = localStorage.getItem(constants.AUTHORIZATION);
       if (isAuthenticated !== null)
         this.$router.push("/");
     },
@@ -101,18 +101,18 @@
         let data = {
           'username': this.username,
           'password': this.password
-        }
+        };
         Service.doLogin(data, (err, response) => {
           if (err != null) {
-            this.messageAlert = err.response.data.response_message
-            this.showAlert = true
+            this.messageAlert = err.response.data.response_message;
+            this.showAlert = true;
             setTimeout(() => {
               this.showAlert = false
             }, 5000)
           }
-          Auth.setAuth(response.data)
+          Auth.setAuth(response.data);
           this.$router.push("/");
-        })
+        });
         e.preventDefault();
       }
     }

@@ -63,8 +63,8 @@
     },
     methods: {
       generateSwagger: function () {
-        const swaggerUi = require("./../../assets/js/swagger-ui-bundle")
-        const preset = require("./../../assets/js/swagger-ui-standalone-preset")
+        const swaggerUi = require("../../assets/js/swagger-ui-bundle");
+        const preset = require("../../assets/js/swagger-ui-standalone-preset");
         // Begin Swagge//sdasd//r UI call region
         const ui = swaggerUi({
           spec: this.dataEditor.get().spec,
@@ -80,16 +80,15 @@
 
       },
       storeMockup: function () {
-        console.log(this.dataEditor.get())
         Service.storeMock(this.dataEditor.get(), (err, response) => {
           if (err != null) {
-            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response.data)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data);
+            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
             setTimeout(() => {
               this.$router.push({name: "listmock"})
             }, 1000)
           } else {
-            alert("Mockup ID" + response.data.id + " Created !")
+            alert("Mockup ID" + response.data.id + " Created !");
             setTimeout(() => {
               this.$router.push({name: "listmock"})
             }, 1000)
@@ -104,10 +103,10 @@
         modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
         name: "jsonContent",
       };
-      const container = document.getElementById("jsoneditor-create")
-      const editor = new global.constants.JSONEditor(container, options)
-      editor.set(this.mockDetail)
-      this.dataEditor = editor
+      const container = document.getElementById("jsoneditor-create");
+      const editor = new global.constants.JSONEditor(container, options);
+      editor.set(this.mockDetail);
+      this.dataEditor = editor;
       this.generateSwagger()
     }
 
