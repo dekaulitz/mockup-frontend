@@ -63,16 +63,16 @@
     },
     methods: {
       generateSwagger: function () {
-        const swaggerUi = require("../../assets/js/swagger-ui-bundle");
-        const preset = require("../../assets/js/swagger-ui-standalone-preset");
+        // const swaggerUi = require("../../assets/js/swagger-ui-bundle");
+        // const preset = require("../../assets/js/swagger-ui-standalone-preset");
         // Begin Swagge//sdasd//r UI call region
-        const ui = swaggerUi({
+        const ui = SwaggerUIBundle({
           spec: this.dataEditor.get().spec,
           dom_id: '#swagger-ui-create',
           deepLinking: true,
           presets: [
-            swaggerUi.presets.apis,
-            preset
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
           ]
         })
       },

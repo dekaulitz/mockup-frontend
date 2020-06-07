@@ -38,7 +38,7 @@
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                   <div class="row add-space-top">
                     <div class="col-md-6">
-                      <div id="jsoneditor" style="height: 650px;width: 100%"></div>
+                      <div id="jsoneditor" style="height: 100%;width: 100%"></div>
                     </div>
                     <div class="col-md-6">
                       <div class="border add-space-bottom">
@@ -49,7 +49,7 @@
                         <button class="btn btn-primary" type="button" v-on:click="generateSwagger()">Validate Swagger
                         </button>
                         <router-link :to="('/swagger/'+mockDetail.id)" class="btn btn-success">
-                          <span class="fa fa-undo"></span> Swagger UI
+                          Swagger UI
                         </router-link>
                       </div>
                       <div class="card">
@@ -116,18 +116,18 @@
     },
     methods: {
       generateSwagger: function () {
-        const swaggerUi = require("../../assets/js/swagger-ui-bundle");
-        const preset = require("../../assets/js/swagger-ui-standalone-preset");
+        // const swaggerUi = require("../../assets/js/swagger-ui-bundle");
+        // const preset = require("../../assets/js/swagger-ui-standalone-preset");
         // Begin Swagge//sdasd//r UI call region
-        const ui = swaggerUi({
+        const ui = SwaggerUIBundle({
           spec: this.dataEditor.get().spec,
           dom_id: '#swagger-ui',
           presets: [
-            swaggerUi.presets.apis,
-            preset
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
           ],
           plugins: [
-            swaggerUi.plugins.DownloadUrl
+            SwaggerUIBundle.plugins.DownloadUrl
           ],
         })
       },

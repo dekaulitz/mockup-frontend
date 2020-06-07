@@ -15,7 +15,11 @@
           <th scope="row">{{index+1}}</th>
           <td>{{history.updatedBy.username|ucFirst}}</td>
           <td>{{history.updatedDate|localdate}}</td>
-          <td><a href="">Swagger UI</a></td>
+          <td>
+            <router-link :to="('/swagger/'+history.mockId+'/history/'+history.id)" class="btn btn-success">
+              Swagger UI
+            </router-link>
+          </td>
         </tr>
         </tbody>
       </table>

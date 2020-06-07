@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="card-body content-box-body">
-        <div id="swagger-ui"></div>
+        <div id="swagger-ui-history"></div>
       </div>
     </div>
 
@@ -22,7 +22,7 @@
   import Auth from "../../service/auth.service";
 
   export default {
-    name: "mock.swagger.component",
+    name: "mock.swagger.history.component",
     data: function () {
       {
         return {
@@ -35,7 +35,7 @@
             },
             {
               "frontEndUrl": this.$router.currentRoute.fullPath,
-              'menuName': "Swagger  "
+              'menuName': "History " + this.$router.currentRoute.params.historyId
             }
           ],
         }
@@ -45,7 +45,8 @@
     },
     mounted() {
       let mockId = this.$router.currentRoute.params.id;
-      Service.getSpec(mockId, (err, response) => {
+      let historyId = this.$router.currentRoute.params.historyId;
+      Service.getSpecHistory(mockId, historyId, (err, response) => {
         if (err != null) {
           alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data);
           if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
@@ -54,11 +55,13 @@
               this.$router.push({name: "listmock"})
             }, 1000)
         } else {
-
+          console.log(response.data);
+          // const swaggerUi = require("../../assets/js/swagger-ui-bundle");
+          // const preset = require("../../assets/js/swagger-ui-standalone-preset");
           // Begin Swagge//sdasd//r UI call region
-          const ui = SwaggerUIBundle({
-            dom_id: '#swagger-ui',
-            spec: response.data,
+          const b = SwaggerUIBundle({
+            dom_id: '#swagger-ui-history',
+            spec: response.data.swagger,
             presets: [
               SwaggerUIBundle.presets.apis,
               SwaggerUIStandalonePreset

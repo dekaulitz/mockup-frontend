@@ -8,6 +8,7 @@ import UsersDetail from './users/user.detail.component'
 import MockDetail from './mocks/mock.detail.component'
 import CreateMock from './mocks/mock.create.component'
 import SwaggerMock from './mocks/mock.swagger.component'
+import SwaggerMockHistory from './mocks/mock.swagger.history.component'
 import Login from './login.component'
 
 Vue.use(Router);
@@ -68,6 +69,11 @@ export default new Router({
           path: 'swagger/:id',
           name: "swagger",
           component: SwaggerMock
+        },
+        {
+          path: 'swagger/:id/history/:historyId',
+          name: 'mockhistory',
+          component: SwaggerMockHistory
         }
       ]
     },

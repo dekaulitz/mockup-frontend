@@ -295,6 +295,25 @@ mockService.getSpec = (id, callback) => {
   })
 };
 
+//get spec
+mockService.getSpecHistory = (id, historyId, callback) => {
+  instance.get("/mocks/" + id + "/histories/" + historyId, {
+    headers: {
+      Authorization: getAuthorizationHeader()
+    }
+  }).then(response => {
+    return callback(null, response)
+  }).catch(err => {
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data);
+      return mockService.getSpecHistory(id, historyId, callback)
+    })
+  })
+};
+
 //get user list page
 mockService.getUserList = function (query, callback) {
   instance.get("/mocks/users/list" + query, {
