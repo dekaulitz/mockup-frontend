@@ -19,7 +19,6 @@
 <script>
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
-  import Auth from "../../service/auth.service";
 
   export default {
     name: "mock.swagger.history.component",
@@ -48,17 +47,8 @@
       let historyId = this.$router.currentRoute.params.historyId;
       Service.getSpecHistory(mockId, historyId, (err, response) => {
         if (err != null) {
-          alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data);
-          if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-          else
-            setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
+          this.validateResponseHandler(err)
         } else {
-          console.log(response.data);
-          // const swaggerUi = require("../../assets/js/swagger-ui-bundle");
-          // const preset = require("../../assets/js/swagger-ui-standalone-preset");
-          // Begin Swagge//sdasd//r UI call region
           const b = SwaggerUIBundle({
             dom_id: '#swagger-ui-history',
             spec: response.data.swagger,

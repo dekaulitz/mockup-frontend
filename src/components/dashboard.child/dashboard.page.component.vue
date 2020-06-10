@@ -70,8 +70,8 @@
 <script>
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
-  //import BasePage from '../shared/base.paging.component'
   import {basePage} from '../../shared/mixins/mixin.page'
+  import {mixGeneral} from '../../shared/mixins/mixin.general'
   import WidgetSearching from '../../shared/components/table.widget.search.component'
   import WidgetSorting from '../../shared/components/table.widget.sort.component'
   import WidgetFooter from '../../shared/components/table.widget.footer.component'
@@ -79,7 +79,7 @@
 
   export default {
     name: "dashboard.page.component",
-    mixins: [basePage],
+    mixins: [basePage, mixGeneral],
     data: function () {
       return {
         title: "List Swagger Mockup",
@@ -108,31 +108,23 @@
     },
     methods: {
       getData: function () {
-        // this.$router.push({path: this.$router.path, query: this.query})
         let querystring = require('querystring');
         Service.getMockPage('?' + querystring.stringify(this.query), (err, response) => {
           if (err != null) {
-            alert(err.response.data.response_message!=null?err.response.data.response_message:err.response.data)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'})
+            this.validateResponseHandler(err)
           } else {
-            this.rows = response.rows
-            this.totalPage = response.pageCount
-            this.currentPage = response.page
+            this.rows = response.rows;
+            this.totalPage = response.pageCount;
+            this.currentPage = response.page;
             this.totalData = response.rowCount
           }
         })
       }
     },
     created() {
-      this.getData()
+      this.getData();
       if (Auth.hasCreateMockaccess()) this.hasAccess = true
     },
-    // mounted:function () {
-    //    BasePage.methods.getData(this)
-    //   setTimeout(function () {
-    //     console.log(this.rows)
-    //   },10000)
-    // },
     components: {
       "app-breadcrumb": Breadcrumb,
       "table-widget-searching": WidgetSearching,

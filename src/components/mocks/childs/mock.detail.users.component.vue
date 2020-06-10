@@ -68,7 +68,6 @@
 
 <script>
   import Service from '../../../service/mock.service'
-  import Auth from "../../../service/auth.service";
 
   export default {
     name: "mock.detail.users.componennt",
@@ -93,25 +92,19 @@
           let query = {username: this.username};
           Service.searchUserByName('?' + querystring.stringify(query), (err, response) => {
             if (err !== null) {
-              console.log(err)
+              this.validateResponseHandler(err)
             }
             this.showUserList = true;
             this.searchUserListResult = response.data
           })
         }
-
       },
 
       addOrUpdateUserAccessToMock: function () {
         let data = {"userId": this.userId, "access": this.mocksAccess};
         Service.addUserAccesOnMock(this.$router.currentRoute.params.id, data, (err, response) => {
           if (err != null) {
-            // alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            else
-              setTimeout(() => {
-                this.$router.push({name: "listmock"})
-              }, 1000)
+            this.validateResponseHandler(err)
           } else {
             alert("user added");
             this.$emit("getUsersOfMocks", true)
@@ -121,12 +114,7 @@
       removeUserAccess: function (userId) {
         Service.removeAccessUserOnMock(this.$router.currentRoute.params.id, userId, (err, response) => {
           if (err != null) {
-            // alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            else
-              setTimeout(() => {
-                this.$router.push({name: "listmock"})
-              }, 1000)
+            this.validateResponseHandler(err)
           } else {
             alert("user removed !");
             this.$emit("getUsersOfMocks", true)

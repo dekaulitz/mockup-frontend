@@ -19,7 +19,6 @@
 <script>
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
-  import Auth from "../../service/auth.service";
 
   export default {
     name: "mock.swagger.component",
@@ -47,15 +46,8 @@
       let mockId = this.$router.currentRoute.params.id;
       Service.getSpec(mockId, (err, response) => {
         if (err != null) {
-          alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data);
-          if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-          else
-            setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
+          this.validateResponseHandler(err)
         } else {
-
-          // Begin Swagge//sdasd//r UI call region
           const ui = SwaggerUIBundle({
             dom_id: '#swagger-ui',
             spec: response.data,

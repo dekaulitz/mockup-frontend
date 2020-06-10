@@ -67,7 +67,7 @@
                         </div>
                         <div v-show="hasAccess">
                           <div class="box-footer">
-                            <button type="submit" class="btn btn-success col-md-12">
+                            <button class="btn btn-success col-md-12" type="submit" v-bind:class="updateButton">
                               Update
                             </button>
                           </div>
@@ -89,9 +89,11 @@
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
   import Auth from '../../service/auth.service'
+  import {mixGeneral} from '../../shared/mixins/mixin.general'
 
   export default {
     name: "user.detail.component",
+    mixins: [mixGeneral],
     data: function () {
       return {
         showAlert: false,
@@ -115,6 +117,7 @@
     },
     methods: {
       updateUser: function () {
+        this.updateButton = "disabled";
         let access = [];
         if (this.userAccess !== "NONE") access.push(this.userAccess);
         if (this.mocksAccess !== "NONE") access.push(this.mocksAccess);
@@ -124,14 +127,9 @@
           accessList: access
         };
         Service.updateUserById(this.$router.currentRoute.params.id, data, (err, response) => {
+          this.updateButton = "enabled";
           if (err != null) {
-            this.messageAlert = err;
-            this.showAlert = true;
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            else
-              setTimeout(() => {
-                this.showAlert = false
-              }, 5000)
+            this.validateResponseHandler(err)
           } else {
             alert("updated !");
             this.$router.push({name: 'listusers'})
@@ -143,14 +141,13 @@
           this.hasAccess = true;
         Service.getUserId(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
-            alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data);
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            else
-              setTimeout(() => {
-                this.$router.push({name: "listmock"})
-              }, 1000)
+            this.validateResponseHandler(err)
           } else {
             let res = response.data;
+            console.log(res);
+
+
+
             this.username = res.username;
             this.accessList = res.accessList;
             if (res.accessList.includes(Auth.USERS_READ_WRITE)) {

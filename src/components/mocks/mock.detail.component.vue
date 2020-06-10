@@ -6,7 +6,7 @@
         <div class="col-md-12 no-padding">
           <div class="card content-box">
             <div class="card-header">
-              <div class="float-left"><h4>{{mockDetail.title}} | {{mockDetail.id}} </h4></div>
+              <div class="float-left"><h4>{{mainHeader}}</h4></div>
               <div class="float-right">
                 <router-link :to="('/')" class="btn btn-success">Back</router-link>
               </div>
@@ -16,12 +16,13 @@
 
               <div class="border add-space-bottom">
                 <div class="">
-                  <h3 class="headerline">Project Title {{mockDetail.title}} | Created by {{updatedBy.username}}</h3>
-                  <p class="lead">{{mockDetail.description}}</p>
-                  <label>Updated on
+                  <h3 class="headerline">{{title}}</h3>
+                  <label>
                     <font-awesome-icon icon="calendar"/>
                     {{mockDetail.dateUpdated|localdate}}</label>
                 </div>
+                <p class="lead">{{mockDetail.description}}</p>
+
               </div>
 
               <nav>
@@ -42,7 +43,8 @@
                     </div>
                     <div class="col-md-6">
                       <div class="border add-space-bottom">
-                        <button class="btn btn-primary" type="button" v-on:click="updateMocks()" v-show="hasAccess">
+                        <button class="btn btn-primary" type="button" v-bind:class="updateButton"
+                                v-on:click="updateMocks()" v-show="hasAccess">
                           Update
                           Mocks
                         </button>
@@ -78,7 +80,6 @@
 <script>
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
-  import Auth from '../../service/auth.service'
   import {mixGeneral} from '../../shared/mixins/mixin.general.js'
   import Histories from '../mocks/childs/mock.detail.histories.component'
   import Users from '../mocks/childs/mock.detail.users.component'
@@ -99,7 +100,9 @@
         dataEditor: {},
         swagggerMockUrl: "",
         hasAccess: false,
-        updatedBy: {},
+        updatedBy: {
+          username: ""
+        },
         breadcrumbs: [
           {"frontEndUrl": '/', 'menuName': "Mockup List"},
           {
@@ -109,16 +112,23 @@
         ],
 
       }
-    }, components: {
+    },
+    computed: {
+      mainHeader: function () {
+        return this.mockDetail.title + " | " + this.mockDetail.id
+      },
+      title: function () {
+        let updatedBy = this.updatedBy.username = "" ? "" : this.updatedBy.username;
+        return "Project Title " + this.mockDetail.title + " | Created by " + updatedBy.toString().charAt(0).toUpperCase() + updatedBy.slice(1)
+      }
+    },
+    components: {
       "app-breadcrumb": Breadcrumb,
       "app-histories": Histories,
       "app-users": Users
     },
     methods: {
       generateSwagger: function () {
-        // const swaggerUi = require("../../assets/js/swagger-ui-bundle");
-        // const preset = require("../../assets/js/swagger-ui-standalone-preset");
-        // Begin Swagge//sdasd//r UI call region
         const ui = SwaggerUIBundle({
           spec: this.dataEditor.get().spec,
           dom_id: '#swagger-ui',
@@ -134,17 +144,12 @@
       getData: function () {
         Service.getDetailMockWithAccess(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
-            if (Auth.shouldLogout(err)) {
-              // alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
-              this.$router.push({name: 'Login'})
-            } else setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
+            this.validateResponseHandler(err)
           } else {
             this.mockDetail = response.data;
             this.updatedBy = response.data.updatedBy;
             if (this.checkAccessCurretUser(this.mockDetail)) {
-                this.hasAccess = true
+              this.hasAccess = true
             }
             const options = {
               modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
@@ -161,11 +166,7 @@
       getDataHistory: function () {
         Service.getHistoriesMocks(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
-            // alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            else setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
+            this.validateResponseHandler(err)
           } else {
             this.mockHistories = response.data
           }
@@ -174,25 +175,18 @@
       getUsersOfMocks: function () {
         Service.getUsersMock(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
-            // alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            else setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
+            this.validateResponseHandler(err)
           } else {
             this.mockUsers = response.data
           }
         })
       },
       updateMocks: function () {
+        this.updateButton = "disabled";
         Service.updateMock(this.$router.currentRoute.params.id, this.dataEditor.get(), (err, response) => {
+          this.updateButton = "enabled";
           if (err != null) {
-            // alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data)
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            else
-              setTimeout(() => {
-                this.$router.push({name: "listmock"})
-              }, 1000)
+            this.validateResponseHandler(err)
           } else {
             alert("Mockup ID" + response.data.id + " Updated !");
             this.getDataHistory()

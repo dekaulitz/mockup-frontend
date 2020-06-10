@@ -65,7 +65,8 @@
                           </div>
                         </div>
                         <div class="box-footer">
-                          <button type="submit" class="btn btn-success col-md-12" @click.prevent="createUser">
+                          <button @click.prevent="createUser" class="btn btn-success col-md-12" type="submit"
+                                  v-bind:class="saveButton">
                             Create
                           </button>
                         </div>
@@ -86,10 +87,11 @@
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
   import 'jsoneditor/dist/jsoneditor.min.css'
-  import Auth from "../../service/auth.service";
+  import {mixGeneral} from '../../shared/mixins/mixin.general'
 
   export default {
     name: "mock.detail.component",
+    mixins: [mixGeneral],
     data: function () {
       return {
         showAlert: false,
@@ -113,6 +115,7 @@
     },
     methods: {
       createUser: function () {
+        this.saveButton = "disabled";
         let access = [];
         if (this.userAccess !== "NONE") access.push(this.userAccess);
         if (this.mocksAccess !== "NONE") access.push(this.mocksAccess);
@@ -122,16 +125,9 @@
           accessList: access
         };
         Service.createNewUser(data, (err, response) => {
+          this.saveButton = "enabled";
           if (err != null) {
-            console.log(err);
-            this.messageAlert = err;
-            this.showAlert = true;
-            alert(err.response.data.response_message != null ? err.response.data.response_message : err.response);
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            else
-              setTimeout(() => {
-                this.showAlert = false
-              }, 5000)
+            this.validateResponseHandler(err)
           } else {
             alert("created !");
             this.$router.push({name: 'listusers'})

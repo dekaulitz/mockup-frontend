@@ -10,7 +10,9 @@
               <div class="float-right">
                 <router-link :to="('/')" class="btn btn-success">Back</router-link>
                 <button type="button" class="btn btn-primary" v-on:click="generateSwagger()">Validate Swagger</button>
-                <button type="button" class="btn btn-primary" v-on:click="storeMockup()">Save Mockup</button>
+                <button class="btn btn-primary" type="button" v-bind:class="saveButton" v-on:click="storeMockup()">Save
+                  Mockup
+                </button>
               </div>
             </div>
             <div class="card-body content-box-body">
@@ -36,10 +38,11 @@
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
   import 'jsoneditor/dist/jsoneditor.min.css'
-  import Auth from "../../service/auth.service";
+  import {mixGeneral} from '../../shared/mixins/mixin.general'
 
   export default {
     name: "mock.detail.component",
+    mixins: [mixGeneral],
     data: function () {
       return {
         mockDetail: {
@@ -63,9 +66,6 @@
     },
     methods: {
       generateSwagger: function () {
-        // const swaggerUi = require("../../assets/js/swagger-ui-bundle");
-        // const preset = require("../../assets/js/swagger-ui-standalone-preset");
-        // Begin Swagge//sdasd//r UI call region
         const ui = SwaggerUIBundle({
           spec: this.dataEditor.get().spec,
           dom_id: '#swagger-ui-create',
@@ -80,13 +80,11 @@
 
       },
       storeMockup: function () {
+        this.saveButton = "disabled";
         Service.storeMock(this.dataEditor.get(), (err, response) => {
+          this.saveButton = "enabled";
           if (err != null) {
-            alert(err.response.data.response_message != null ? err.response.data.response_message : err.response.data);
-            if (Auth.shouldLogout(err)) this.$router.push({name: 'Login'});
-            setTimeout(() => {
-              this.$router.push({name: "listmock"})
-            }, 1000)
+            this.validateResponseHandler(err)
           } else {
             alert("Mockup ID" + response.data.id + " Created !");
             setTimeout(() => {
