@@ -54,7 +54,7 @@
         this.alertMessage = message;
         setTimeout(() => {
           this.isAlertShowup = false
-        }, 1500)
+        }, 3000)
       }
     }
   }

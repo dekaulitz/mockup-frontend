@@ -13,7 +13,7 @@
         <tbody>
         <tr :key="index" v-for="(history,index) in mockHistories">
           <th scope="row">{{index+1}}</th>
-          <td>{{history.updatedBy.username|ucFirst}}</td>
+          <td>{{title(history)}}</td>
           <td>{{history.updatedDate|localdate}}</td>
           <td>
             <router-link :to="('/swagger/'+history.mockId+'/history/'+history.id)" class="btn btn-success">
@@ -32,7 +32,16 @@
     name: "mock.detail.histories.component",
     props: {
       mockHistories: Array,
+    },
+    methods: {
+      title: function (history) {
+        let updatedBy = "Unknown";
+        if (history.updatedBy)
+          updatedBy = history.updatedBy.username = "" ? "Unknown" : history.updatedBy.username;
+        return "Updated by " + updatedBy.toString().charAt(0).toUpperCase() + updatedBy.slice(1)
+      }
     }
+
   }
 </script>
 
