@@ -129,7 +129,7 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
-            alert("created !");
+            this.$emit("pushMessage", "alert-info", "User created !");
             this.$router.push({name: 'listusers'})
           }
         })
