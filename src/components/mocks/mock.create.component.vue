@@ -86,7 +86,7 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
-            alert("Mockup ID" + response.data.id + " Created !");
+            this.$emit("pushMessage", "alert-info", "Mock created !");
             setTimeout(() => {
               this.$router.push({name: "listmock"})
             }, 1000)

@@ -191,7 +191,7 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
-            alert("Mockup ID" + response.data.id + " Updated !");
+            this.$emit("pushMessage", "alert-info", "Mock updated !");
             this.getDataHistory()
 
           }

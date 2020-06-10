@@ -21,7 +21,7 @@
                     </div>
                     <fieldset>
                       <legend>Users Data:</legend>
-                      <form role="form" @submit="updateUser">
+                      <form role="form">
                         <div class="box-body">
                           <div class="form-group">
                             <label for="usernameInput" class="label-bold">Username</label>
@@ -67,7 +67,7 @@
                         </div>
                         <div v-show="hasAccess">
                           <div class="box-footer">
-                            <button class="btn btn-success col-md-12" type="submit" v-bind:class="updateButton">
+                            <button class="btn btn-success col-md-12" type="submit" v-bind:class="updateButton" @click.prevent="updateUser">
                               Update
                             </button>
                           </div>
@@ -131,7 +131,7 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
-            alert("updated !");
+            this.$emit("pushMessage", "alert-info", "User updated!");
             this.$router.push({name: 'listusers'})
           }
         })
@@ -145,9 +145,6 @@
           } else {
             let res = response.data;
             console.log(res);
-
-
-
             this.username = res.username;
             this.accessList = res.accessList;
             if (res.accessList.includes(Auth.USERS_READ_WRITE)) {
