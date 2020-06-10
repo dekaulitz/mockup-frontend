@@ -39,7 +39,7 @@
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                   <div class="row add-space-top">
                     <div class="col-md-6">
-                      <div id="jsoneditor" style="height: 100%;width: 100%"></div>
+                      <div id="jsoneditor" style="height: 750px;width: 100%"></div>
                     </div>
                     <div class="col-md-6">
                       <div class="border add-space-bottom">
@@ -130,7 +130,7 @@
     methods: {
       generateSwagger: function () {
         const ui = SwaggerUIBundle({
-          spec: this.dataEditor.get().spec,
+          spec: this.dataEditor.get(),
           dom_id: '#swagger-ui',
           presets: [
             SwaggerUIBundle.presets.apis,
@@ -157,7 +157,7 @@
             };
             const container = document.getElementById("jsoneditor");
             const editor = new global.constants.JSONEditor(container, options);
-            editor.set(this.mockDetail);
+            editor.set(this.mockDetail.spec);
             this.dataEditor = editor;
             this.generateSwagger()
           }
@@ -183,7 +183,8 @@
       },
       updateMocks: function () {
         this.updateButton = "disabled";
-        Service.updateMock(this.$router.currentRoute.params.id, this.dataEditor.get(), (err, response) => {
+        this.mockDetail.spec = this.dataEditor.get();
+        Service.updateMock(this.$router.currentRoute.params.id, this.mockDetail, (err, response) => {
           this.updateButton = "enabled";
           if (err != null) {
             this.validateResponseHandler(err)
