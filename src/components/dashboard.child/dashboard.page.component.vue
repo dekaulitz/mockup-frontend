@@ -42,6 +42,9 @@
               <th class="header-pagination">
                 Description
               </th>
+              <th class="header-pagination">
+                Date Updated
+              </th>
             </tr>
             </thead>
             <tbody>
@@ -56,6 +59,7 @@
               <td>{{item.id}}</td>
               <td>{{item.title}}</td>
               <td>{{item.description}}</td>
+              <td>{{item.updatedDate|localdate}}</td>
             </tr>
             </tbody>
           </table>

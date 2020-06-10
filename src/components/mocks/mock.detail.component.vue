@@ -121,7 +121,7 @@
         let updatedBy = "Unknown";
         if (this.updatedBy)
           updatedBy = this.updatedBy.username = "" ? "Unknown" : this.updatedBy.username;
-        return "Project Title " + this.mockDetail.title + " | Created by " + updatedBy.toString().charAt(0).toUpperCase() + updatedBy.slice(1)
+        return "Project Title " + this.mockDetail.title
       }
     },
     components: {
