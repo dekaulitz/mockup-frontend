@@ -118,7 +118,9 @@
         return this.mockDetail.title + " | " + this.mockDetail.id
       },
       title: function () {
-        let updatedBy = this.updatedBy.username = "" ? "" : this.updatedBy.username;
+        let updatedBy = "Unknown";
+        if (this.updatedBy)
+          updatedBy = this.updatedBy.username = "" ? "Unknown" : this.updatedBy.username;
         return "Project Title " + this.mockDetail.title + " | Created by " + updatedBy.toString().charAt(0).toUpperCase() + updatedBy.slice(1)
       }
     },
