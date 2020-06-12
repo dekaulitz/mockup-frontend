@@ -19,24 +19,26 @@ export const mixGeneral = {
 
       console.log(error.response);
       switch (error.response.status) {
-        case 401: {
+        case 401:
+          this.$emit("pushMessage", "alert-warning", error.response.data.response_message);
           if (error.response.data.response_code === "MOCK012") {
             if (Auth.shouldLogout(error)) setTimeout(() => {
               this.$router.push({name: 'Login'});
             }, 1000);
             break;
           }
-        }
-        case 403: {
-          console.log(this.$router);
+        case 403:
           this.$emit("pushMessage", "alert-warning", error.response.data.response_message);
           break;
-        }
-        case 500: {
-          if (error.response.data.response_code === "MOCK012")
-            this.$emit("pushMessage", "alert-danger", error.response.data.response_message);
+        case 400:
+          this.$emit("pushMessage", "alert-warning", error.response.data.response_message);
           break;
-        }
+        case 422:
+          this.$emit("pushMessage", "alert-warning", error.response.data.response_message);
+          break;
+        case 500:
+          this.$emit("pushMessage", "alert-danger", error.response.data.response_message + ", something wrong with you're request with requestId " + error.response.data.requestId);
+          break;
       }
 
     }
