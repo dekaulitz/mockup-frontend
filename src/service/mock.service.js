@@ -26,8 +26,9 @@ mockService.doLogin = (data, callback) => {
  */
 //do refresh token
 mockService.doRefresh = function (err, callback) {
-  console.log(err);
-  if (err.response.data.response_code === auth.RESPONSE_DO_REFRESH) {
+  if (!err.response) {
+    return callback(err, null)
+  } else if (err.response.data.response_code === auth.RESPONSE_DO_REFRESH) {
     console.log("do refresh");
     instance.get("/mocks/auth/refresh", {
       headers: {
@@ -38,7 +39,7 @@ mockService.doRefresh = function (err, callback) {
     }).catch(err => {
       return callback(err, null)
     })
-  } else{
+  } else {
     return callback(err, null)
   }
 };
@@ -182,7 +183,7 @@ mockService.searchUserByName = (q, callback) => {
   })
 };
 
-mockService.getUsersMock=function(id,callback){
+mockService.getUsersMock = function (id, callback) {
   instance.get("/mocks/" + id + "/users", {
     headers: {
       Authorization: getAuthorizationHeader()
@@ -200,7 +201,7 @@ mockService.getUsersMock=function(id,callback){
     })
   })
 };
-mockService.getHistoriesMocks=function(id,callback){
+mockService.getHistoriesMocks = function (id, callback) {
   instance.get("/mocks/" + id + "/histories", {
     headers: {
       Authorization: getAuthorizationHeader()
@@ -238,7 +239,6 @@ mockService.storeMock = (data, callback) => {
 };
 
 
-
 //update mock
 mockService.updateMock = (id, data, callback) => {
   instance.put("/mocks/" + id + "/update", data, {
@@ -253,7 +253,7 @@ mockService.updateMock = (id, data, callback) => {
         return callback(errResponse, null)
       }
       auth.setAuth(response.data);
-      return mockService.updateMock(id,data, callback)
+      return mockService.updateMock(id, data, callback)
     })
   })
 };
@@ -342,7 +342,7 @@ mockService.getUserId = function (id, callback) {
   }).then(response => {
     return callback(null, response)
   }).catch(err => {
-    return doRefresh(err, (errResponse, response) => {
+    return mockService.doRefresh(err, (errResponse, response) => {
       if (errResponse != null) {
         return callback(errResponse, null)
       }
@@ -366,7 +366,7 @@ mockService.updateUserById = function (id, data, callback) {
         return callback(errResponse, null)
       }
       auth.setAuth(response.data);
-      return mockService.updateUserById(id,data, callback)
+      return mockService.updateUserById(id, data, callback)
     })
   })
 };

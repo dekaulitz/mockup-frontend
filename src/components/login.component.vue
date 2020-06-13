@@ -88,7 +88,7 @@
         password: ""
       }
     },
-    components:{
+    components: {
       Footer
     },
     beforeMount: function () {
@@ -103,15 +103,26 @@
           'password': this.password
         };
         Service.doLogin(data, (err, response) => {
-          if (err != null) {
-            this.messageAlert = err.response.data.response_message;
-            this.showAlert = true;
-            setTimeout(() => {
-              this.showAlert = false
-            }, 5000)
+          if (err!=null) {
+            if (!err.response) {
+              this.messageAlert = err;
+              this.showAlert = true;
+              setTimeout(() => {
+                this.showAlert = false
+              }, 5000)
+            }else if(err.response!=null){
+              console.log("2")
+              this.messageAlert = err.response.data.response_message;
+              this.showAlert = true;
+              setTimeout(() => {
+                this.showAlert = false
+              }, 5000)
+            }
           }
-          Auth.setAuth(response.data);
-          this.$router.push("/");
+          else{
+            Auth.setAuth(response.data);
+            this.$router.push("/");
+          }
         });
         e.preventDefault();
       }
@@ -142,7 +153,7 @@
   .login-page {
     min-height: 100%;
     position: relative;
-    padding: 65px 15px;
+    padding: 0px 15px;
   }
 
   .login-form {

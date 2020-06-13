@@ -42,6 +42,7 @@
                               class="form-control input-default"
                               placeholder="Password"
                             >
+                            <small id="passwordInput1" class="form-text text-muted">If blank will use the old password.</small>
                           </div>
                           <div class="form-group">
                             <label for="mocksAccess" class="label-bold">Management Mocks</label>
