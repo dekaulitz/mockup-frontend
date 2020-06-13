@@ -114,7 +114,6 @@ mockService.getDetailMock = (id, callback) => {
   }).then((response) => {
     return callback(null, response)
   }).catch((err) => {
-    alert(err);
     return mockService.doRefresh(err, (errResponse, response) => {
       if (errResponse != null) {
         return callback(errResponse, null)
