@@ -106,7 +106,6 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
-            alert("user added");
             this.$emit("getUsersOfMocks", true)
           }
         })
@@ -116,7 +115,6 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
-            alert("user removed !");
             this.$emit("getUsersOfMocks", true)
           }
         })

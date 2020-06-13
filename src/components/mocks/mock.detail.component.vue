@@ -179,6 +179,7 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
+            this.$emit("pushMessage", "alert-info", "Data updated!");
             this.mockUsers = response.data
           }
         })
