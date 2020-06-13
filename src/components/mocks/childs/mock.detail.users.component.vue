@@ -106,7 +106,7 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
-            this.$emit("getUsersOfMocks", true)
+            this.$emit("getUsersOfMocksModification", true)
           }
         })
       },
@@ -115,7 +115,7 @@
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
-            this.$emit("getUsersOfMocks", true)
+            this.$emit("getUsersOfMocksModification", true)
           }
         })
       },

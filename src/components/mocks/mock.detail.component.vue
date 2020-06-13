@@ -62,7 +62,7 @@
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                   <app-users :has-access="hasAccess" :mock-users="mockUsers"
-                             @getUsersOfMocks="getUsersOfMocks"></app-users>
+                             @getUsersOfMocksModification="getUsersOfMocksModification"></app-users>
                 </div>
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                   <app-histories :mock-histories="mockHistories"></app-histories>
@@ -174,12 +174,21 @@
           }
         })
       },
-      getUsersOfMocks: function () {
+      getUsersOfMocksModification:function(){
         Service.getUsersMock(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
             this.validateResponseHandler(err)
           } else {
             this.$emit("pushMessage", "alert-info", "Data updated!");
+            this.mockUsers = response.data
+          }
+        })
+      },
+      getUsersOfMocks: function () {
+        Service.getUsersMock(this.$router.currentRoute.params.id, (err, response) => {
+          if (err != null) {
+            this.validateResponseHandler(err)
+          } else {
             this.mockUsers = response.data
           }
         })
