@@ -190,7 +190,6 @@ mockService.getUsersMock = function (id, callback) {
   }).then((response) => {
     return callback(null, response)
   }).catch((err) => {
-    console.log(err.response);
     return mockService.doRefresh(err, (errResponse, response) => {
       if (errResponse != null) {
         return callback(errResponse, null)
@@ -208,7 +207,6 @@ mockService.getHistoriesMocks = function (id, callback) {
   }).then((response) => {
     return callback(null, response)
   }).catch((err) => {
-    console.log(err.response);
     return mockService.doRefresh(err, (errResponse, response) => {
       if (errResponse != null) {
         return callback(errResponse, null)
@@ -372,13 +370,11 @@ mockService.updateUserById = function (id, data, callback) {
 
 //create new user
 mockService.createNewUser = function (data, callback) {
-  console.log("data");
   instance.post("/mocks/addUser", data, {
     headers: {
       Authorization: getAuthorizationHeader()
     }
   }).then(response => {
-    console.log(response);
     return callback(null, response)
   }).catch(err => {
     return mockService.doRefresh(err, (errResponse, response) => {
@@ -390,6 +386,41 @@ mockService.createNewUser = function (data, callback) {
     })
   })
 };
+//create new user
+mockService.deleteUser = function (id, callback) {
+  instance.delete("/mocks/user/"+id+"/delete",  {
+    headers: {
+      Authorization: getAuthorizationHeader()
+    }
+  }).then(response => {
+    return callback(null, response)
+  }).catch(err => {
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data);
+      return mockService.deleteUser(id, callback)
+    })
+  })
+};
 
+mockService.deleteByMockId = function (id, callback) {
+  instance.delete("/mocks/"+id+"/delete",  {
+    headers: {
+      Authorization: getAuthorizationHeader()
+    }
+  }).then(response => {
+    return callback(null, response)
+  }).catch(err => {
+    return mockService.doRefresh(err, (errResponse, response) => {
+      if (errResponse != null) {
+        return callback(errResponse, null)
+      }
+      auth.setAuth(response.data);
+      return mockService.deleteByMockId(id, callback)
+    })
+  })
+};
 
 module.exports = mockService;

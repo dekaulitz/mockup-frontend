@@ -51,11 +51,13 @@
 
             <tr v-for="item in rows">
               <td>
-                <router-link :to="'/detail/'+item.id">
+                <router-link :to="'/detail/'+item.id" class="btn btn-primary btn-sm-page">
                   <font-awesome-icon icon="edit"/>
                 </router-link>
+                <button class="btn btn-secondary btn-sm-page" @click="deleteByMockId(item.id)" v-show="hasAccess">
+                  <font-awesome-icon icon="window-close"/>
+                </button>
               </td>
-
               <td>{{item.id}}</td>
               <td>{{item.title}}</td>
               <td>{{item.description}}</td>
@@ -121,6 +123,16 @@
             this.totalPage = response.pageCount;
             this.currentPage = response.page;
             this.totalData = response.rowCount
+          }
+        })
+      },
+      deleteByMockId:function (id) {
+        Service.deleteByMockId(id,(err, response) => {
+          if (err != null) {
+            this.validateResponseHandler(err)
+          }else{
+            this.$emit("pushMessage", "alert-info", "Mock deleted !");
+            this.getData()
           }
         })
       }

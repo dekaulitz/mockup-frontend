@@ -16,6 +16,7 @@ export const mixGeneral = {
       return this.hasAccess
     },
     validateResponseHandler: function (error) {
+      console.log(error)
       if (!error.response) {
         this.$emit("pushMessage", "alert-warning", error);
       } else

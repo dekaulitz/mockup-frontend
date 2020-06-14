@@ -42,9 +42,10 @@
 
             <tr v-for="item in rows">
               <td>
-                <router-link :to="'/users/detail/'+item.id">
+                <router-link :to="'/users/detail/'+item.id"  class="btn btn-primary btn-sm-page">
                   <font-awesome-icon icon="edit"/>
                 </router-link>
+                <button type="button" class="btn btn-secondary btn-sm-page" @click="deleteUser(item.id)" v-show="hasAccess">  <font-awesome-icon icon="window-close"/></button>
               </td>
               <td>{{item.id}}</td>
               <td>{{item.username}}</td>
@@ -63,6 +64,7 @@
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
   import {basePage} from '../../shared/mixins/mixin.page'
+  import {mixGeneral} from '../../shared/mixins/mixin.general'
   import WidgetSearching from '../../shared/components/table.widget.search.component'
   import WidgetSorting from '../../shared/components/table.widget.sort.component'
   import WidgetFooter from '../../shared/components/table.widget.footer.component'
@@ -70,7 +72,7 @@
 
   export default {
     name: "dashboard.page.component",
-    mixins: [basePage],
+    mixins: [basePage,mixGeneral],
     data: function () {
       return {
         title: "List Users",
@@ -108,6 +110,16 @@
             this.totalPage = response.pageCount;
             this.currentPage = response.page;
             this.totalData = response.rowCount
+          }
+        })
+      },
+      deleteUser:function (id) {
+        Service.deleteUser(id,(err, response) => {
+          if (err != null) {
+            this.validateResponseHandler(err)
+          }else{
+            this.$emit("pushMessage", "alert-info", "User deleted !");
+            this.getData()
           }
         })
       }
