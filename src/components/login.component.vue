@@ -28,7 +28,8 @@
                 <div class="login-form">
                   <div class="card panel-default ">
                     <div v-show="showAlert" class="alert alert-warning">
-                      {{ messageAlert }}
+                      <h5 class="alert-heading">Warning!</h5>
+                     <div class="validation" v-html="messageAlert"></div>
                     </div>
                     <div class="card-body  ">
                       <form role="form" @submit="doLogin">
@@ -103,23 +104,29 @@
           'password': this.password
         };
         Service.doLogin(data, (err, response) => {
-          if (err!=null) {
+          if (err != null) {
             if (!err.response) {
               this.messageAlert = err;
               this.showAlert = true;
               setTimeout(() => {
                 this.showAlert = false
               }, 5000)
-            }else if(err.response!=null){
-              console.log("2")
-              this.messageAlert = err.response.data.response_message;
+            } else if (err.response != null) {
+              if (err.response.data.response_code === "MOCK027") {
+                let extraMessage="<ul>"
+                for(let i =0;i<err.response.data.extraMessages.length;i++){
+                  extraMessage+="<li>"+err.response.data.extraMessages[i]+"</li>"
+                }
+                extraMessage+="</ul>"
+                this.messageAlert=extraMessage
+              } else
+                this.messageAlert = err.response.data.response_message;
               this.showAlert = true;
               setTimeout(() => {
-                this.showAlert = false
+                this.showAlert = true
               }, 5000)
             }
-          }
-          else{
+          } else {
             Auth.setAuth(response.data);
             this.$router.push("/");
           }

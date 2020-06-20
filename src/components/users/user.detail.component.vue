@@ -9,6 +9,8 @@
               <div class="float-left"><h4>Detail Users</h4></div>
               <div class="float-right">
                 <router-link :to="('/users')" class="btn btn-success">Back</router-link>
+                <button type="button" class="btn btn-danger" @click="deleteUser()" v-show="hasAccess">Delete</button>
+
               </div>
             </div>
             <div class="card-body content-box-body">
@@ -133,6 +135,16 @@
             this.validateResponseHandler(err)
           } else {
             this.$emit("pushMessage", "alert-info", "User updated!");
+            this.$router.push({name: 'listusers'})
+          }
+        })
+      },
+      deleteUser:function () {
+        Service.deleteUser(this.$router.currentRoute.params.id,(err, response) => {
+          if (err != null) {
+            this.validateResponseHandler(err)
+          }else{
+            this.$emit("pushMessage", "alert-info", "User deleted !");
             this.$router.push({name: 'listusers'})
           }
         })

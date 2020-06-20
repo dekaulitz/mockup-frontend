@@ -12,8 +12,6 @@
               </div>
             </div>
             <div class="card-body content-box-body">
-
-
               <div class="border add-space-bottom">
                 <div class="">
                   <h3 class="headerline">{{title}}</h3>
@@ -53,6 +51,8 @@
                         <router-link :to="('/swagger/'+mockDetail.id)" class="btn btn-success">
                           Swagger UI
                         </router-link>
+                        <button class="btn btn-danger" @click="deleteByMockId()" v-show="hasAccess">Delete
+                        </button>
                       </div>
                       <div class="card">
                         <div id="swagger-ui"></div>
@@ -141,6 +141,16 @@
           plugins: [
             SwaggerUIBundle.plugins.DownloadUrl
           ],
+        })
+      },
+      deleteByMockId:function () {
+        Service.deleteByMockId(this.$router.currentRoute.params.id,(err, response) => {
+          if (err != null) {
+            this.validateResponseHandler(err)
+          }else{
+            this.$emit("pushMessage", "alert-info", "Mock deleted !");
+            this.$router.push({name: 'listmock'})
+          }
         })
       },
       getData: function () {

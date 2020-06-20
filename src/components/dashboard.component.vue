@@ -6,8 +6,8 @@
 
       <div class="alert  alert-dismissible fade show add-space-top" role="alert" v-bind:class="alertMessageCss"
            v-show="isAlertShowup">
-        <strong>Hai {{getUsernameAccount}}!</strong>
-        <p>{{alertMessage}}</p>
+        <h4 class="alert-heading">Hai {{getUsernameAccount}}!</h4>
+        <div class="validation" v-html="alertMessage"></div>
         <button aria-label="Close" class="close" type="button" @click="alertClosed">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -59,7 +59,7 @@
         this.alertMessage = message;
         setTimeout(() => {
           this.isAlertShowup = false
-        }, 3500)
+        }, 4500)
       }
     }
   }
