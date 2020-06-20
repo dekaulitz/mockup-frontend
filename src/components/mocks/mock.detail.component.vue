@@ -16,8 +16,7 @@
                 <div class="">
                   <h3 class="headerline">{{title}}</h3>
                   <label>
-                    <font-awesome-icon icon="calendar"/>
-                    {{mockDetail.dateUpdated|localdate}}</label>
+                    Last updated {{mockDetail.dateUpdated|localdate}}</label>
                 </div>
                 <p class="lead">{{mockDetail.description}}</p>
 
@@ -118,10 +117,7 @@
         return this.mockDetail.title + " | " + this.mockDetail.id
       },
       title: function () {
-        let updatedBy = "Unknown";
-        if (this.updatedBy)
-          updatedBy = this.updatedBy.username = "" ? "Unknown" : this.updatedBy.username;
-        return "Project Title " + this.mockDetail.title
+        return this.mockDetail.title
       }
     },
     components: {
