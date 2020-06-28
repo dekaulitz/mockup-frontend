@@ -19,9 +19,10 @@
 <script>
   import Breadcrumb from '../../shared/components/breadcrumb.component'
   import Service from '../../service/mock.service'
-
+  import {mixGeneral} from '../../shared/mixins/mixin.general'
   export default {
     name: "mock.swagger.component",
+    mixins: [ mixGeneral],
     data: function () {
       {
         return {
