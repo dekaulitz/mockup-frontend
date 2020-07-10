@@ -68,8 +68,9 @@
 
 <script>
   import Service from '../../../service/mock.service'
-
+  import {mixGeneral} from '../../../shared/mixins/mixin.general'
   export default {
+    mixins: [mixGeneral],
     name: "mock.detail.users.componennt",
     data: function () {
       return {
