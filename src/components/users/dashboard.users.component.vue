@@ -36,6 +36,9 @@
               <th class="header-pagination">
                 Username
               </th>
+              <th class="header-pagination">
+                Date Updated
+              </th>
             </tr>
             </thead>
             <tbody>
@@ -48,6 +51,7 @@
                  </td>
               <td>{{item.id}}</td>
               <td>{{item.username}}</td>
+              <td>{{item.updatedDate|localdate}}</td>
             </tr>
             </tbody>
           </table>
