@@ -95,7 +95,9 @@ textarea {
     opacity: 0
   }
 }
-
+.card{
+  animation: fadeIn 1.5s;
+}
 .animate__fadeOut {
   -webkit-animation-name: fadeOut;
   animation-name: fadeOut

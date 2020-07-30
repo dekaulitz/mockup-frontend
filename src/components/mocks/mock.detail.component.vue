@@ -114,6 +114,9 @@
     },
     computed: {
       mainHeader: function () {
+        if (this.mockDetail.title === undefined) {
+          return "TITLE"
+        }
         return this.mockDetail.title + " | " + this.mockDetail.id
       },
       title: function () {
@@ -139,11 +142,11 @@
           ],
         })
       },
-      deleteByMockId:function () {
-        Service.deleteByMockId(this.$router.currentRoute.params.id,(err, response) => {
+      deleteByMockId: function () {
+        Service.deleteByMockId(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
             this.validateResponseHandler(err)
-          }else{
+          } else {
             this.$emit("pushMessage", "alert-info", "Mock deleted !");
             this.$router.push({name: 'listmock'})
           }
@@ -180,7 +183,7 @@
           }
         })
       },
-      getUsersOfMocksModification:function(){
+      getUsersOfMocksModification: function () {
         Service.getUsersMock(this.$router.currentRoute.params.id, (err, response) => {
           if (err != null) {
             this.validateResponseHandler(err)
